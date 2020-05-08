@@ -19,7 +19,8 @@ public class GameManager : MonoBehaviour
     private Queue<BasicUnit> units;
     public GameObject obj;
     private Camera cam;
-    public float offset = 0.5f;
+    private float tileOffset;
+    private Vector3 mapOffset;
 
     private float size;
     // Start is called before the first frame update
@@ -29,6 +30,8 @@ public class GameManager : MonoBehaviour
         size = tilemap.cellSize.x;
         Debug.Log(size);
         cam = Camera.main;
+        tileOffset = size / 2f;
+        mapOffset = tilemap.transform.position;
         // map = new CreatureTile[mapWidth,mapHeight];
         // foreach (CreatureTile x in map )
         // {
@@ -39,9 +42,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            
             SpawnUnit(cam.ScreenToWorldPoint(Input.mousePosition));
-            Debug.Log(Input.mousePosition);
         }
     }
 
@@ -51,21 +52,47 @@ public class GameManager : MonoBehaviour
         
     }
 
-    Vector3 getNearestPositionOnGrid(Vector3 position)
+    Vector3 GetNearestPositionOnGrid(Vector3 position)
     {
-        position -= tilemap.transform.position;
-        Debug.Log(tilemap.transform.position);
-        int x = Mathf.RoundToInt((position.x-offset) / size);
-        int y = Mathf.RoundToInt((position.y-offset) / size);
-        Vector3 result = new Vector3((float) (x*size)+offset,(float) (y*size)+offset,0);
+        return TileCoordinatesToReal(RealCoordinatesToNearestTile(position));;
+    }
 
-        result += tilemap.transform.position;
-        return result;
+    Vector3 TileCoordinatesToReal(Vector2Int tileCoordinates)
+    {
+        
+        
+        tileCoordinates.y = (tileCoordinates.y - mapHeight + 1)*(-1); //move [0,0] back to bottom left corner
+            
+        tileCoordinates.x -= mapWidth/2;     // coordinates [0,0] are in middle of tile map, so we need to get rid of the negative coordinates
+        tileCoordinates.y -= mapHeight/2;    // to use them in 2D array map
+        
+       
+        //Unity uses center as position, not left corner, so to compensate offset(half of tile size) is needed
+        Vector3 coordinates = new Vector3(  (tileCoordinates.x*size)+tileOffset,
+                                            (tileCoordinates.y*size)+tileOffset,
+                                            0); 
+        coordinates += mapOffset;
+        return coordinates;
+    }
+
+    Vector2Int RealCoordinatesToNearestTile(Vector3 realCoordinates)
+    {   
+        //Unity uses center as position, not left corner, so to compensate offset(half of tile size) is needed
+        realCoordinates -= mapOffset;
+        Vector2Int coordinates = new Vector2Int(Mathf.RoundToInt((realCoordinates.x-tileOffset)/size),
+                                                Mathf.RoundToInt((realCoordinates.y-tileOffset)/size));
+        
+        coordinates.x += mapWidth / 2;    // coordinates [0,0] are in middle of tile map, so we need to get rid of the negative coordinates
+        coordinates.y += mapHeight / 2;   // to use them in 2D array map, now [0,0] is in bottom left corner
+        coordinates.y = (coordinates.y - mapHeight + 1)*(-1);  //this moves [0,0] to upper right corner
+   
+
+        return coordinates;
     }
     void SpawnUnit(Vector3 position)
     {
         
-        Vector3 finPosition = getNearestPositionOnGrid(position);
+        Vector3 finPosition = GetNearestPositionOnGrid(position);
         if (!(finPosition.x < ((-mapWidth * size / 2)+tilemap.transform.position.x) || finPosition.x > ((mapWidth * size / 2)+tilemap.transform.position.x) ||
               finPosition.y < ((-mapHeight * size / 2)+tilemap.transform.position.y) || finPosition.y > ((mapHeight * size / 2)+tilemap.transform.position.y)))
         {
