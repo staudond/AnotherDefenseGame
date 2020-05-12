@@ -8,23 +8,26 @@ using UnityEngine.Tilemaps;
 // #endif
 public abstract class BasicCreature : MonoBehaviour
 {
-    public Vector3 position;
-    
-    public void spawn(Vector3 position)
-    {
-        this.position = position;
-        //Instantiate(gameObject);
-        gameObject.transform.position = new Vector3(position.x  ,position.y,position.z);
-    }
-    
+    public Vector2Int position;
     
     
     public const int maxHealth = 0;
     public const int damage = 0;
     public const int speed = 1;
+    private int health;
 
+    public BasicCreature(Vector2Int pos)
+    {
+        position = pos;
+        health = maxHealth;
+    }
+
+    public void Death()
+    {
+        Destroy(this.gameObject);
+    }
     
-    // protected Vector3Int move(Vector3Int position)
+    // protected Vector3Int move(Vector2Int position)
     // {
     //     //promyslet jak prase            
     // }

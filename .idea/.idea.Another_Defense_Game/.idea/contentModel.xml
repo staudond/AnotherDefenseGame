@@ -13,11 +13,16 @@
           <e p="BasicUnit.cs" t="Include" />
         </e>
         <e p="GameManager.cs" t="Include" />
+        <e p="Pathfinding" t="Include">
+          <e p="PathNode.cs" t="Include" />
+          <e p="Pathfinding.cs" t="Include" />
+        </e>
         <e p="Properties" t="Include">
           <e p="EnemyProperties.cs" t="Include" />
           <e p="Properties.cs" t="Include" />
           <e p="UnitProperties.cs" t="Include" />
         </e>
+        <e p="SceneChanger.cs" t="Include" />
         <e p="Spawn.cs" t="Include" />
       </e>
       <e p="Temp/bin" t="ExcludeRecursive" />

@@ -6,17 +6,14 @@ using UnityEditor;
 #endif
 public class BasicEnemy: BasicCreature
 {
-    
-    
-// #if UNITY_EDITOR
-// // The following is a helper that adds a menu item to create a EnemyTile Asset
-//     [MenuItem("Assets/Create/EnemyTile")]
-//     public static void CreateEnemyTile()
-//     {
-//         string path = EditorUtility.SaveFilePanelInProject("Save Enemy Tile", "New Enemy Tile", "Asset", "Save Enemy Tile", "Assets");
-//         if (path == "")
-//             return;
-//         AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<Enemy>(), path);
-//     }
-// #endif    
+    public const int stamina = 15;
+    private List<Vector2Int> path;
+
+    public BasicEnemy(Vector2Int pos) : base(pos)
+    {
+    }
+    void move()
+    {
+        
+    }
 }
