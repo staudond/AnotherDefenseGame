@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 // #if UNITY_EDITOR
 // using UnityEditor;
@@ -15,10 +16,17 @@ public abstract class BasicCreature : MonoBehaviour
     public const int damage = 0;
     public const int speed = 1;
     private int health;
+    public bool canMove;
 
+  
+
+    public void ResetAfterTurn() {
+        canMove = true;
+    }
     public BasicCreature(Vector2Int pos)
     {
         position = pos;
+        canMove = true;
         health = maxHealth;
     }
 
