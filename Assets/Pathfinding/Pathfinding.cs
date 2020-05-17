@@ -16,11 +16,11 @@ public class Pathfinding
     private int height;
 
     private MapTile[,] map;
-    public Pathfinding(int width, int height, MapTile[,] map)
+    public Pathfinding( MapTile[,] map)
     {
         this.map = map;
-        this.width = width;
-        this.height = height;
+        this.width = map.GetLength(0);
+        this.height = map.GetLength(1);
         grid = createGrid(width,height);
     }
 
