@@ -350,13 +350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58d900a7b31baef54a5dcca8ba3b5c27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapWidth: 34
-  mapHeight: 12
-  roads: {fileID: 1011876349}
-  SpawnPositions: {fileID: 888591037}
-  GoalPositions: {fileID: 1678426475}
   obj: {fileID: 1577330569}
-  endTurnButton: {fileID: 670745537}
 --- !u!1 &569202306
 GameObject:
   m_ObjectHideFlags: 0
@@ -4174,12 +4168,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!1 &670745537 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4059959799710299835, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
-    type: 3}
-  m_PrefabInstance: {fileID: 2015105362}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &670745538 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4059959799710299834, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
@@ -6949,6 +6937,7 @@ GameObject:
   - component: {fileID: 1577330572}
   - component: {fileID: 1577330571}
   - component: {fileID: 1577330570}
+  - component: {fileID: 1577330573}
   m_Layer: 8
   m_Name: Unit
   m_TagString: Untagged
@@ -7033,6 +7022,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &1577330573
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1577330569}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &1678426472
 GameObject:
   m_ObjectHideFlags: 0
@@ -7621,6 +7636,11 @@ PrefabInstance:
     - target: {fileID: 4059959799710299835, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
         type: 3}
       propertyPath: m_Name
+      value: EndTurnButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059959799710299835, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_TagString
       value: EndTurnButton
       objectReference: {fileID: 0}
     m_RemovedComponents: []
