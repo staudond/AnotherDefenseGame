@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
@@ -10,7 +11,7 @@ using UnityEngine.Tilemaps;
 public abstract class BasicCreature : MonoBehaviour
 {
     public Vector2Int position;
-    
+    private MapTile[,] map;
     
     public const int maxHealth = 0;
     public const int damage = 0;
@@ -18,6 +19,10 @@ public abstract class BasicCreature : MonoBehaviour
     private int health;
     public bool canMove;
 
+    public void SetUp(MapTile[,] map, Vector2Int position) {
+        this.position = position;
+        this.map = map;
+    }
   
 
     public void ResetAfterTurn() {

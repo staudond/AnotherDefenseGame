@@ -6958,6 +6958,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   position: {x: 0, y: 0}
+  canMove: 1
 --- !u!212 &1577330571
 SpriteRenderer:
   m_ObjectHideFlags: 0

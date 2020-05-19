@@ -295,10 +295,11 @@ public class GameManager : MonoBehaviour {
             if (map[tilePosition.x, tilePosition.y].isEmpty && !map[tilePosition.x, tilePosition.y].isSpawn ) {
                 GameObject unitObject = Instantiate(obj, finPosition, Quaternion.identity);
                 BasicUnit unit = unitObject.GetComponent("BasicUnit") as BasicUnit;
-                //Instantiate(obj, finPosition, Quaternion.identity);
                 map[tilePosition.x, tilePosition.y].isEmpty = false;
-                unit.position = tilePosition;
-                units.Add(unit);
+                if (unit != null) {
+                    unit.SetUp(map, tilePosition);
+                    units.Add(unit);
+                }
             }
         }
     }
