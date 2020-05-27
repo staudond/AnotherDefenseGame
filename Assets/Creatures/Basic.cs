@@ -11,41 +11,104 @@ using UnityEngine.Tilemaps;
 public abstract class BasicCreature : MonoBehaviour
 {
     public Vector2Int position;
-    private MapTile[,] map;
+    protected MapTile[,] map;
+
+    public int MaxHealth => maxHealth;
+
+    public int Damage => damage;
+
+    public int AttackSpeed => attackSpeed;
+
+    public int AttackCooldown => attackCooldown;
+
+    protected int maxHealth;
+    protected int damage ;
+    protected  int attackSpeed; //number of attack creature can do at once when attacks
+    protected  int attackCooldown ; //number of turns before creature can attack
+    protected int remainingAttackCooldown;
+    protected int health;
+    protected GameManager manager;
+    protected int goldValue = 1;
+
+    public int GoldValue => goldValue;
+
+    public int Health => health;
+
     
-    public const int maxHealth = 0;
-    public const int damage = 0;
-    public const int speed = 1;
-    private int health;
-    public bool canMove;
+    protected int attackRange;
 
-    public void SetUp(MapTile[,] map, Vector2Int position) {
-        this.position = position;
+     public int AttackRange => attackRange;
+
+     public virtual void SetUp(MapTile[,] map, Vector2Int position,GameManager manager) {
+         
+         this.position = position;
         this.map = map;
-    }
-  
+        this.manager = manager;
+        //canMove = true;
+     }
 
-    public void ResetAfterTurn() {
-        canMove = true;
+    public bool IsAlive() {
+        return health > 0;
     }
-    public BasicCreature(Vector2Int pos)
+
+    public void Attack() {
+        if (remainingAttackCooldown > 0) {
+            remainingAttackCooldown--;
+        }
+        else {
+            bool didAttack = false;
+            for (int i = 0; i < attackSpeed; i++) {
+                if (IndividualAttack()) {
+                    didAttack = true;
+                }
+                else {
+                    break;
+                }
+
+            }
+
+            if (didAttack) {
+                remainingAttackCooldown = attackCooldown;
+            }
+        }
+    }
+
+    protected abstract bool IndividualAttack();
+
+    public virtual void TakeDmg(int dmg) {
+        health -= dmg;
+        if (health <= 0) {
+            Death();
+        }
+    }
+
+    public abstract void Death();
+
+    protected int CalculateDistance(Vector2Int target)
+    {
+        int xDistance = Mathf.Abs(position.x - target.x);
+        int yDistance = Mathf.Abs(position.y - target.y);
+        int rest = Mathf.Abs(xDistance - yDistance);
+        return Mathf.Min(xDistance, yDistance) + rest;
+    }
+
+    public abstract void ResetAfterTurn();
+
+    protected BasicCreature(Vector2Int pos)
     {
         position = pos;
-        canMove = true;
+        //canMove = true;
         health = maxHealth;
     }
-
-    public void Death()
-    {
-        Destroy(this.gameObject);
-    }
     
-    // protected Vector3Int move(Vector2Int position)
-    // {
-    //     //promyslet jak prase            
-    // }
-    void Start()
+    void Awake()
     {
-        //spawn(new Vector3(0.5f,0.5f,0));
+        maxHealth = 10;
+        damage = 0;
+        attackSpeed = 1;
+        attackCooldown = 1;
+        attackRange = 2;
+        health = maxHealth;
+        remainingAttackCooldown = 0;
     }
 }
