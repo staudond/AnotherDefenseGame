@@ -10,4 +10,8 @@ public class SceneChanger : MonoBehaviour
     {
         SceneManager.LoadScene(name);
     }
+
+    public void ReloadScene() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 }
