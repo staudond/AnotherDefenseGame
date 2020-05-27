@@ -266,7 +266,7 @@ public class Pathfinding
     private List<PathNode> CalculatePath(PathNode endNode)
     {
         List<PathNode> path = new List<PathNode>();
-        path.Add(endNode);
+        //path.Add(endNode);
         PathNode current = endNode.previousNode;
         while (current != null)
         {
