@@ -10,8 +10,16 @@
         <e p="CameraMovementOperator.cs" t="Include" />
         <e p="Creatures" t="Include">
           <e p="Basic.cs" t="Include" />
-          <e p="BasicEnemy.cs" t="Include" />
-          <e p="BasicUnit.cs" t="Include" />
+          <e p="Enemies" t="Include">
+            <e p="BasicEnemy.cs" t="Include" />
+            <e p="Goblin.cs" t="Include" />
+            <e p="Orc.cs" t="Include" />
+          </e>
+          <e p="HealthBar.cs" t="Include" />
+          <e p="Units" t="Include">
+            <e p="BasicUnit.cs" t="Include" />
+            <e p="SwordsMan.cs" t="Include" />
+          </e>
         </e>
         <e p="ExitGame.cs" t="Include" />
         <e p="GameManager.cs" t="Include" />

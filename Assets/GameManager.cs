@@ -6,12 +6,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
-
+public enum Units{None = 0,SwordsMan = 1}
+public enum Enemies{None = 0, Goblin = 1,Orc = 2}
 public class MapTile {
     public bool isRoad = true;
     public bool isEmpty = true;
     public bool isSpawn = false;
     public bool hasEnemy = false;
+    public bool hasUnit = false;
     public BasicEnemy enemy = null;
     public BasicUnit unit = null;
 }
@@ -29,11 +31,11 @@ public class GameManager : MonoBehaviour {
     private List<Vector2Int> spawns;
     private List<Vector2Int> goals;
     private Dictionary<Vector2Int, List<Vector2Int>> pathsFromSpawn;
-
+    
     private MapTile[,] map;
-    public List<GameObject> allEnemies;
-    public List<GameObject> allUnits;
-            
+    private List<GameObject> allEnemies;
+    private List<GameObject> allUnits;
+    private List<int> unitValues;        
     private List<BasicEnemy> enemies;
     private List<BasicUnit> units;
 
@@ -57,14 +59,16 @@ public class GameManager : MonoBehaviour {
     private GameObject endTurnButton;
 
     private BasicUnit selectedUnit = null;
-    private GameObject selectedSpawnUnit;
-
+    private Units selectedSpawnUnit;
+   
 
     private Pathfinding pathFinding;
 
     private float tileSize;
 
     private GameObject highlightingTile;
+    private GameObject enemyHighlightingTile;
+    private GameObject unitHighlightingTile;
     private List<GameObject> highlightingTiles;
 
     private List<Vector2Int> highlightedPositions;
@@ -77,6 +81,8 @@ public class GameManager : MonoBehaviour {
     private GameObject pauseScreen;
     private GameObject gameOverScreen;
     private GameObject winningScreen;
+
+    private List<List<int>> waves;
 
     public int PlayerGold => playerGold;
 
@@ -96,7 +102,11 @@ public class GameManager : MonoBehaviour {
         goalPositions = GameObject.Find("GoalPositions").GetComponent<Tilemap>();
         background = GameObject.Find("Background").GetComponent<Tilemap>();
         endTurnButton = GameObject.FindWithTag("EndTurnButton");
-        highlightingTile = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/HighlighTile.prefab");
+        highlightingTile = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/HighlightTiles/HighlightTile.prefab");
+        enemyHighlightingTile = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/HighlightTiles/EnemyHighlightTile.prefab");
+        unitHighlightingTile = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/HighlightTiles/UnitHighlightTile.prefab");
+        
+        
         LivesText = GameObject.Find("Lives").GetComponent<Text>();
         GoldText = GameObject.Find("Gold").GetComponent<Text>();
         pauseScreen = GameObject.Find("PauseScreen");
@@ -111,6 +121,8 @@ public class GameManager : MonoBehaviour {
     void Start() {
         isPaused = false;
         isGameOver = false;
+        AddAllUnits();
+        AddAllEnemeies();
         units = new List<BasicUnit>();
         enemies = new List<BasicEnemy>();
         highlightingTiles = new List<GameObject>();
@@ -119,24 +131,40 @@ public class GameManager : MonoBehaviour {
         mapWidth = sizes.x;
         mapHeight = sizes.y;
         tileSize = roads.cellSize.x;
-        //Debug.Log(size);
         cam = Camera.main;
         tileOffset = tileSize / 2f;
         mapOffset = roads.transform.position;
         InitializeMap();
-        //Debug.Log(backround.size);
-        //Debug.Log(roads.size);
-        selectedSpawnUnit = obj;
-
-        Debug.Log(background.localBounds.max);
-        Debug.Log(background.localBounds.min);
-        Debug.Log(background.localBounds.center);
-        //Debug.Log("Xmax "+background.cellBounds.xMax+" Xmin "+background.cellBounds.xMin);
-        //Debug.Log("Ymax "+background.cellBounds.yMax+" Ymin "+background.cellBounds.yMin);
+       
+        
+        hightile = new List<GameObject>();
     }
 
+    private List<GameObject> hightile;
     void Update() {
-        
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            int i = 1;
+            foreach (var enemy in enemies) {
+                var xs = RangeVectorsToPositions(enemy.position,AttackRangeToRangeVectors(enemy.AttackRange));
+                
+                
+                foreach (var x in xs) {
+                    if (CheckBounds(x)) {
+                        hightile.Add(Instantiate(enemyHighlightingTile, TileCoordinatesToReal(x), Quaternion.identity));
+                    }
+                }
+
+                i++;
+            }
+        }
+        if(Input.GetKeyUp(KeyCode.Space))
+        {
+            foreach (var tile in hightile) {
+                Destroy(tile);
+            }
+            hightile.Clear();
+        }
+
         LivesText.text = "LIVES: " + playerLives;
         GoldText.text = "GOLD: " + playerGold;
         if (playerLives <= 0) {
@@ -166,11 +194,16 @@ public class GameManager : MonoBehaviour {
                     Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
                     RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
                     if (hit.collider != null) {
+                        
                         if (hit.collider.gameObject.GetComponent(typeof(Tilemap)) == roads) {
-                            if (selectedSpawnUnit != null) {
-                                if (selectedSpawnUnit.GetComponent<BasicUnit>().GoldValue <= playerGold) {
+                            
+                            if (selectedSpawnUnit != Units.None) {
+                           
+                                if (unitValues[(int)selectedSpawnUnit-1] <= playerGold) {
+                                   
+                                    
                                     SpawnUnit(cam.ScreenToWorldPoint(Input.mousePosition));
-                                    selectedSpawnUnit = null;
+                                    selectedSpawnUnit = Units.None;
                                 }
                             }
                             else if (selectedUnit != null) {
@@ -181,10 +214,8 @@ public class GameManager : MonoBehaviour {
                         else {
                             BasicUnit temp = hit.collider.gameObject.GetComponent(typeof(BasicUnit)) as BasicUnit;
                             if (temp != null) {
-                                Debug.Log("selected");
                                 selectedUnit = temp;
-                                if (temp.canMove) {
-                                    Debug.Log("can move");
+                                if (temp.CanMove) {
                                     HighlightTiles(RangeVectorsToPositions(temp.position,
                                         RangeToRangeVectors(UnitProperties.UnitMovementRange)));
                                     return;
@@ -223,7 +254,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    bool CheckBounds(Vector2Int position) {
+    public bool CheckBounds(Vector2Int position) {
 
         return (position.x >= 0 && position.x < mapWidth && position.y >= 0 && position.y < mapHeight);
     }
@@ -239,18 +270,22 @@ public class GameManager : MonoBehaviour {
     }
 
     void MoveUnit(Vector3 currentPosition) { //todo move to basic unit script
-        if (selectedUnit.canMove) {
+        if (selectedUnit.CanMove) {
             Vector2Int tilePosition = RealCoordinatesToNearestTile(currentPosition);
             Vector3 realPosition = GetNearestPositionOnGrid(currentPosition);
             foreach (var possiblePosition in highlightedPositions) {
                 if (tilePosition == possiblePosition && map[tilePosition.x, tilePosition.y].isEmpty &&
                     map[tilePosition.x, tilePosition.y].isRoad && !map[tilePosition.x, tilePosition.y].isSpawn) {
                     map[selectedUnit.position.x, selectedUnit.position.y].isEmpty = true;
+                    map[selectedUnit.position.x, selectedUnit.position.y].hasUnit = false;
+                    map[selectedUnit.position.x, selectedUnit.position.y].unit = null;
                     selectedUnit.position = tilePosition;
                     selectedUnit.gameObject.transform.position = realPosition;
 
                     map[tilePosition.x, tilePosition.y].isEmpty = false;
-                    selectedUnit.canMove = false;
+                    map[tilePosition.x, tilePosition.y].hasUnit = true;
+                    map[tilePosition.x, tilePosition.y].unit = selectedUnit;
+                    selectedUnit.CanMove = false;
                 }
             }
         }
@@ -258,14 +293,14 @@ public class GameManager : MonoBehaviour {
     }
 
     void MoveEnemy(BasicEnemy enemy) {
-        int stamina = enemy.stamina;
+        int stamina = enemy.Stamina;
         while (true) {
             if (goals.Contains(enemy.position)) {
                 playerLives--;
                 enemy.Death();
                 return;
             }
-            Vector2Int nextPosition = enemy.path[0];
+            Vector2Int nextPosition = enemy.Path[0];
             
             if (map[nextPosition.x, nextPosition.y].isEmpty) {
                 int xDiff = Mathf.Abs(enemy.position.x - nextPosition.x);
@@ -277,7 +312,7 @@ public class GameManager : MonoBehaviour {
                     stamina -= 10;
                 }
                 else {
-                    return;
+                    break;
                 }
                 
                 map[enemy.position.x, enemy.position.y].isEmpty = true;
@@ -288,12 +323,14 @@ public class GameManager : MonoBehaviour {
                 map[enemy.position.x, enemy.position.y].isEmpty = false;
                 map[enemy.position.x, enemy.position.y].hasEnemy = true;
                 map[enemy.position.x, enemy.position.y].enemy = enemy;
-                enemy.path.RemoveAt(0);
+                enemy.Path.RemoveAt(0);
+                
             }
             else {
-                return;
+                break;
             }
         }
+        enemy.Attack();
     }
 
     
@@ -308,16 +345,13 @@ public class GameManager : MonoBehaviour {
             for (int j = 0; j < mapHeight; j++) {
                 Vector3 pos = TileCoordinatesToReal(new Vector2Int(i, j));
                 Vector3Int position = new Vector3Int((int) (pos.x - tileOffset), (int) (pos.y - tileOffset), 0);
-                // Debug.Log(pos+" real pos");
-                //  Debug.Log(i+"  "+j+" ffff");
-                // Debug.Log(position+" moje");
-                // Debug.Log(roads.WorldToCell(pos));
+
                 map[i, j] = new MapTile();
 
                 map[i, j].isRoad = roads.HasTile(position);
-                //Debug.Log(SpawnPositions.HasTile(position));
+
                 if (spawnPositions.HasTile(position)) {
-                    //Debug.Log("spwan");
+
                     spawns.Add(new Vector2Int(i, j));
                     map[i, j].isSpawn = true;
                 }
@@ -372,7 +406,10 @@ public class GameManager : MonoBehaviour {
         return coordinates;
     }
 
-    public void SpawnEnemy() {
+    public void SpawnEnemy(int i) {
+        if (!(i >= 0 && i < allEnemies.Count)) {
+            return;
+        }
         List<Vector2Int> tempSpawns = new List<Vector2Int>(spawns);
         Vector2Int spawn = new Vector2Int();
         bool found = false;
@@ -394,7 +431,7 @@ public class GameManager : MonoBehaviour {
         
         Vector3 pos = TileCoordinatesToReal(spawn);
         if (map[spawn.x, spawn.y].isEmpty && map[spawn.x, spawn.y].isRoad) {
-            GameObject enemyObject = Instantiate(allEnemies[0], pos, Quaternion.identity);
+            GameObject enemyObject = Instantiate(allEnemies[i], pos, Quaternion.identity);
             BasicEnemy enemy = enemyObject.GetComponent<BasicEnemy>();
 
             if (enemy != null) {
@@ -416,17 +453,22 @@ public class GameManager : MonoBehaviour {
               finPosition.y < ((-mapHeight * tileSize / 2) + roads.transform.position.y) ||
               finPosition.y > ((mapHeight * tileSize / 2) + roads.transform.position.y))) {
             if (map[tilePosition.x, tilePosition.y].isEmpty && !map[tilePosition.x, tilePosition.y].isSpawn) {
-                GameObject unitObject = Instantiate(obj, finPosition, Quaternion.identity);
-                BasicUnit unit = unitObject.GetComponent<BasicUnit>();
-                
-                
-                if (unit != null) {
-                    map[tilePosition.x, tilePosition.y].isEmpty = false;
-                    map[tilePosition.x, tilePosition.y].hasEnemy = false;
-                    map[tilePosition.x, tilePosition.y].unit = unit;
-                    unit.SetUp(map, tilePosition,this);
-                    playerGold -= unit.GoldValue;
-                    units.Add(unit);
+                if (selectedSpawnUnit != Units.None) {
+                    
+                    GameObject unitObject = Instantiate(allUnits[(int) selectedSpawnUnit-1], finPosition,
+                        Quaternion.identity);
+                    BasicUnit unit = unitObject.GetComponent<BasicUnit>();
+                    
+
+                    if (unit != null) {
+                        map[tilePosition.x, tilePosition.y].isEmpty = false;
+                        map[tilePosition.x, tilePosition.y].hasEnemy = false;
+                        map[tilePosition.x, tilePosition.y].hasUnit = true;
+                        map[tilePosition.x, tilePosition.y].unit = unit;
+                        unit.SetUp(map, tilePosition, this);
+                        playerGold -= unit.GoldValue;
+                        units.Add(unit);
+                    }
                 }
             }
         }
@@ -442,26 +484,23 @@ public class GameManager : MonoBehaviour {
         }
 
         
-        //Debug.Log("turn ended");
+        
     }
     
     void EnemyTurn() {
         for (int i = enemies.Count-1 ; i >=0; --i) {
             enemies[i].ResetAfterTurn();
+            
             MoveEnemy(enemies[i]);
         }
-        // foreach (var enemy in enemies) {
-        //     enemy.ResetAfterTurn();
-        //     MoveEnemy(enemy);
-        //     //Debug.Log(enemy.Health);
-        // }
+        
         
         //SpawnEnemy();
         
         isPlayersTurn = true;
         endTurnButton.SetActive(true);
         
-        //Debug.Log("Enemy turn ended");
+       
     }
 
     public static List<Vector2Int> RangeToRangeVectors(int range) {
@@ -487,11 +526,36 @@ public class GameManager : MonoBehaviour {
     }
 
     public static List<Vector2Int> AttackRangeToRangeVectors(int range) {
+       
         List<Vector2Int> vectors = new List<Vector2Int>();
+        Debug.Log(range);
+        if (range % 10 == 5) {
+            range /= 10;
+            range++;
+            Debug.Log(range);
+            for (int y = -range; y <= range; y++) {
+                for (int x = -(range - Mathf.Abs(y)); x <= range - Mathf.Abs(y); x++) {
+                    if ((x == 0 && y == 0) || (Mathf.Abs(x) == range || Mathf.Abs(y) == range)) {
+                        continue;
+                    }
+
+                    vectors.Add(new Vector2Int(x, y));
+                }
+            }
+
+            foreach (var VARIABLE in vectors) {
+                Debug.Log(VARIABLE);
+            }
+            return vectors;
+        }
+
+        range /= 10;
         for (int y = -range; y <= range; y++) {
             for (int x = -(range - Mathf.Abs(y)); x <= range - Mathf.Abs(y); x++) {
-                if (x == 0 && y == 0)
+                if (x == 0 && y == 0) {
                     continue;
+                }
+
                 vectors.Add(new Vector2Int(x, y));
             }
         }
@@ -506,5 +570,26 @@ public class GameManager : MonoBehaviour {
     public void Unpause() {
         isPaused = false;
         pauseScreen.SetActive(false);
+    }
+
+    private void AddAllUnits() {
+        allUnits = new List<GameObject>();
+        unitValues = new List<int>();
+        allUnits.Add(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Creatures/Units/SwordsManPrefab.prefab"));
+        unitValues.Add(UnitProperties.SwordsmanGoldValue);
+    }
+
+    private void AddAllEnemeies() {
+        allEnemies = new List<GameObject>();
+        allEnemies.Add(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Creatures/Enemies/GoblinPrefab.prefab"));
+        allEnemies.Add(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Creatures/Enemies/OrcPrefab.prefab"));
+    }
+
+    public void SelectUnitToSpawn(String unitName) {
+        if (Enum.TryParse(unitName, true, out selectedSpawnUnit)) {
+
+        }
+
+
     }
 }

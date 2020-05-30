@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 public class CameraMovementOperator : MonoBehaviour {
     private Camera cam;
     [SerializeField] private int speed = 10;
-    private float maxCameraSize;
+    [SerializeField] private float maxCameraSize;
     private float minCameraSize = 4;
     private int cameraBorderOffset = 2;
     [SerializeField] private float cameraPixelBorderOffset;
@@ -26,7 +26,7 @@ public class CameraMovementOperator : MonoBehaviour {
         cameraMaxPosition = camBounds.max+parentOffset;
 
         cameraMinPosition = camBounds.min+parentOffset;
-        maxCameraSize = background.size.y/2+1;
+        maxCameraSize = (float)background.size.y/2+0.5f;
         cameraPixelBorderOffset = 25;
         
     }

@@ -10,6 +10,7 @@ using UnityEngine.Tilemaps;
 // #endif
 public abstract class BasicCreature : MonoBehaviour
 {
+    public event EventHandler OnHealthChanged;
     public Vector2Int position;
     protected MapTile[,] map;
 
@@ -24,7 +25,7 @@ public abstract class BasicCreature : MonoBehaviour
     protected int maxHealth;
     protected int damage ;
     protected  int attackSpeed; //number of attack creature can do at once when attacks
-    protected  int attackCooldown ; //number of turns before creature can attack
+    protected  int attackCooldown ; //number of turns before creature can attack again
     protected int remainingAttackCooldown;
     protected int health;
     protected GameManager manager;
@@ -35,7 +36,7 @@ public abstract class BasicCreature : MonoBehaviour
     public int Health => health;
 
     
-    protected int attackRange;
+    public int attackRange;
 
      public int AttackRange => attackRange;
 
@@ -44,11 +45,16 @@ public abstract class BasicCreature : MonoBehaviour
          this.position = position;
         this.map = map;
         this.manager = manager;
+        health = maxHealth;
         //canMove = true;
      }
 
     public bool IsAlive() {
         return health > 0;
+    }
+
+    public float GetHealthPercent() {
+        return (float)health / maxHealth;
     }
 
     public void Attack() {
@@ -75,8 +81,15 @@ public abstract class BasicCreature : MonoBehaviour
 
     protected abstract bool IndividualAttack();
 
+    protected void ChangeHealth() {
+        if (OnHealthChanged != null) {
+            OnHealthChanged(this,EventArgs.Empty);
+        }
+    }
+    
     public virtual void TakeDmg(int dmg) {
         health -= dmg;
+        ChangeHealth();
         if (health <= 0) {
             Death();
         }
