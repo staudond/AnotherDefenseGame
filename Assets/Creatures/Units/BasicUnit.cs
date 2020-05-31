@@ -6,7 +6,7 @@ using UnityEngine.Rendering;
 using UnityEditor;
 #endif
 
-public class BasicUnit : BasicCreature
+public abstract class BasicUnit : BasicCreature
 {
     protected bool canMove;
 
@@ -61,9 +61,10 @@ public class BasicUnit : BasicCreature
     }
 
     public override void Death() {
-        manager.RemoveUnit(this);
         map[position.x, position.y].isEmpty = true;
         map[position.x, position.y].unit = null;
+        map[position.x, position.y].hasUnit = false;
+        manager.RemoveUnit(this);
         Destroy(this.gameObject);
     }
 }

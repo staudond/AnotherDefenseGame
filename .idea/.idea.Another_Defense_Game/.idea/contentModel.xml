@@ -23,6 +23,11 @@
         </e>
         <e p="ExitGame.cs" t="Include" />
         <e p="GameManager.cs" t="Include" />
+        <e p="MapWaves" t="Include">
+          <e p="EnemyWave.cs" t="Include" />
+          <e p="MapWaves.cs" t="Include" />
+          <e p="TestMapWaves.cs" t="Include" />
+        </e>
         <e p="Pathfinding" t="Include">
           <e p="PathNode.cs" t="Include" />
           <e p="Pathfinding.cs" t="Include" />

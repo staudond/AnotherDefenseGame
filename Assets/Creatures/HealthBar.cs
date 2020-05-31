@@ -25,7 +25,6 @@ public class HealthBar : MonoBehaviour {
     private void CreatureOnOnHealthChanged(object sender, EventArgs e) {
         float percentage = creature.GetHealthPercent();
         if (percentage < 0.5f) {
-            Debug.Log('s');
             bar.Find("BarSprite").GetComponent<SpriteRenderer>().color = injuredColor;
         }
         

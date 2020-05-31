@@ -8,6 +8,9 @@ using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 public enum Units{None = 0,SwordsMan = 1}
 public enum Enemies{None = 0, Goblin = 1,Orc = 2}
+
+
+
 public class MapTile {
     public bool isRoad = true;
     public bool isEmpty = true;
@@ -23,6 +26,8 @@ public class GameManager : MonoBehaviour {
 
     private int mapHeight;
 
+
+    private int currentDelayBetweenPartsOfWaves;
     private Tilemap background;
     private Tilemap roads;
     private Tilemap spawnPositions;
@@ -48,6 +53,8 @@ public class GameManager : MonoBehaviour {
 
     private bool isPlayersTurn = true;
     private static bool isPaused = false;
+    private bool betweenPhase = false;
+    private bool endOfWave = false;
 
     public static bool IsPaused => isPaused;
 
@@ -74,6 +81,8 @@ public class GameManager : MonoBehaviour {
     private List<Vector2Int> highlightedPositions;
     private Text LivesText; 
     private Text GoldText; 
+    private Text WaveText;
+    private GameObject PhaseText;
     
     [SerializeField] private int playerLives = 20;
     
@@ -82,7 +91,8 @@ public class GameManager : MonoBehaviour {
     private GameObject gameOverScreen;
     private GameObject winningScreen;
 
-    private List<List<int>> waves;
+    private MapWaves waves;
+    private EnemyWave currentWave = null;
 
     public int PlayerGold => playerGold;
 
@@ -102,13 +112,19 @@ public class GameManager : MonoBehaviour {
         goalPositions = GameObject.Find("GoalPositions").GetComponent<Tilemap>();
         background = GameObject.Find("Background").GetComponent<Tilemap>();
         endTurnButton = GameObject.FindWithTag("EndTurnButton");
-        highlightingTile = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/HighlightTiles/HighlightTile.prefab");
-        enemyHighlightingTile = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/HighlightTiles/EnemyHighlightTile.prefab");
-        unitHighlightingTile = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/HighlightTiles/UnitHighlightTile.prefab");
+        // highlightingTile = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/HighlightTiles/HighlightTile.prefab");
+        // enemyHighlightingTile = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/HighlightTiles/EnemyHighlightTile.prefab");
+        // unitHighlightingTile = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/HighlightTiles/UnitHighlightTile.prefab");
+        highlightingTile = Resources.Load<GameObject>("Assets/Prefabs/HighlightTiles/HighlightTile.prefab");
+        enemyHighlightingTile = Resources.Load<GameObject>("Assets/Prefabs/HighlightTiles/EnemyHighlightTile.prefab");
+        unitHighlightingTile = Resources.Load<GameObject>("Assets/Prefabs/HighlightTiles/UnitHighlightTile.prefab");
         
         
         LivesText = GameObject.Find("Lives").GetComponent<Text>();
         GoldText = GameObject.Find("Gold").GetComponent<Text>();
+        WaveText = GameObject.Find("Wave").GetComponent<Text>();
+        PhaseText = GameObject.Find("Phase");
+        PhaseText.SetActive(false);
         pauseScreen = GameObject.Find("PauseScreen");
         pauseScreen.SetActive(false);
         gameOverScreen = GameObject.Find("GameOverScreen");
@@ -119,10 +135,13 @@ public class GameManager : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
+        //todo change
+        waves = new TestMapWaves();
+        
         isPaused = false;
         isGameOver = false;
         AddAllUnits();
-        AddAllEnemeies();
+        AddAllEnemies();
         units = new List<BasicUnit>();
         enemies = new List<BasicEnemy>();
         highlightingTiles = new List<GameObject>();
@@ -138,14 +157,15 @@ public class GameManager : MonoBehaviour {
        
         
         hightile = new List<GameObject>();
+        currentWave = waves.NextWave();
+        WaveText.text = "Wave " + currentWave.number;
     }
 
     private List<GameObject> hightile;
     void Update() {
         if (Input.GetKeyDown(KeyCode.Space)) {
-            int i = 1;
-            foreach (var enemy in enemies) {
-                var xs = RangeVectorsToPositions(enemy.position,AttackRangeToRangeVectors(enemy.AttackRange));
+            foreach (var unit in units) {
+                var xs = RangeVectorsToPositions(unit.position,AttackRangeToRangeVectors(unit.AttackRange));
                 
                 
                 foreach (var x in xs) {
@@ -153,8 +173,6 @@ public class GameManager : MonoBehaviour {
                         hightile.Add(Instantiate(enemyHighlightingTile, TileCoordinatesToReal(x), Quaternion.identity));
                     }
                 }
-
-                i++;
             }
         }
         if(Input.GetKeyUp(KeyCode.Space))
@@ -167,6 +185,12 @@ public class GameManager : MonoBehaviour {
 
         LivesText.text = "LIVES: " + playerLives;
         GoldText.text = "GOLD: " + playerGold;
+        
+        if (currentWave == null && waves.Empty() && enemies.Count == 0) {
+            isGameOver = true;
+            won = true;
+        }
+        
         if (playerLives <= 0) {
             isGameOver = true;
             gameOverScreen.SetActive(true);
@@ -215,6 +239,7 @@ public class GameManager : MonoBehaviour {
                             BasicUnit temp = hit.collider.gameObject.GetComponent(typeof(BasicUnit)) as BasicUnit;
                             if (temp != null) {
                                 selectedUnit = temp;
+                                selectedSpawnUnit = Units.None;
                                 if (temp.CanMove) {
                                     HighlightTiles(RangeVectorsToPositions(temp.position,
                                         RangeToRangeVectors(UnitProperties.UnitMovementRange)));
@@ -227,6 +252,7 @@ public class GameManager : MonoBehaviour {
 
                     StopHighlighting();
                     selectedUnit = null;
+                    selectedSpawnUnit = Units.None;
                 }
 
                 if (Input.GetKeyDown(KeyCode.Escape)) {
@@ -242,6 +268,19 @@ public class GameManager : MonoBehaviour {
 
     void HighlightTiles(List<Vector2Int> positions) {
         StopHighlighting();
+        if (betweenPhase) {
+            for (int x = 0; x < mapWidth; x++) {
+                for (int y = 0; y < mapHeight; y++) {
+                    if (map[x, y].isRoad && map[x, y].isEmpty && !map[x, y].isSpawn) {
+                        Vector3 pos = TileCoordinatesToReal(new Vector2Int(x, y));
+                        highlightingTiles.Add(Instantiate(highlightingTile, pos, Quaternion.identity));
+                        highlightedPositions.Add(new Vector2Int(x,y));
+                    }
+                }
+            }
+
+            return;
+        }
         foreach (var tilePosition in positions) {
             if (CheckBounds(tilePosition)) {
                 if (map[tilePosition.x, tilePosition.y].isRoad && !map[tilePosition.x, tilePosition.y].isSpawn &&
@@ -285,7 +324,9 @@ public class GameManager : MonoBehaviour {
                     map[tilePosition.x, tilePosition.y].isEmpty = false;
                     map[tilePosition.x, tilePosition.y].hasUnit = true;
                     map[tilePosition.x, tilePosition.y].unit = selectedUnit;
-                    selectedUnit.CanMove = false;
+                    if (!betweenPhase) {
+                        selectedUnit.CanMove = false;
+                    }
                 }
             }
         }
@@ -406,9 +447,9 @@ public class GameManager : MonoBehaviour {
         return coordinates;
     }
 
-    public void SpawnEnemy(int i) {
+    public bool SpawnEnemy(int i) {
         if (!(i >= 0 && i < allEnemies.Count)) {
-            return;
+            return false;
         }
         List<Vector2Int> tempSpawns = new List<Vector2Int>(spawns);
         Vector2Int spawn = new Vector2Int();
@@ -426,7 +467,7 @@ public class GameManager : MonoBehaviour {
         }
 
         if (!found) {
-            return;
+            return false;
         }
         
         Vector3 pos = TileCoordinatesToReal(spawn);
@@ -442,6 +483,8 @@ public class GameManager : MonoBehaviour {
                 enemies.Add(enemy);
             }
         }
+
+        return true;
     }
 
     void SpawnUnit(Vector3 position) {
@@ -482,7 +525,16 @@ public class GameManager : MonoBehaviour {
             unit.ResetAfterTurn();
             unit.Attack();
         }
-
+        
+        if (betweenPhase) {
+            betweenPhase = false;
+            endOfWave = false;
+            WaveText.gameObject.transform.parent.gameObject.SetActive(true);
+            PhaseText.SetActive(false);
+            currentWave = waves.NextWave();
+            WaveText.text = "Wave " + currentWave.number;
+            
+        }
         
         
     }
@@ -493,14 +545,56 @@ public class GameManager : MonoBehaviour {
             
             MoveEnemy(enemies[i]);
         }
-        
-        
-        //SpawnEnemy();
-        
+
+        if (!endOfWave) {
+            SpawnWave();
+        }
+
+        if (endOfWave && enemies.Count == 0) {
+            WaveText.gameObject.transform.parent.gameObject.SetActive(false);
+            PhaseText.SetActive(true);
+            betweenPhase = true;
+            currentDelayBetweenPartsOfWaves = 0;
+        }
         isPlayersTurn = true;
         endTurnButton.SetActive(true);
         
        
+    }
+
+    private void SpawnWave() {
+        if (currentDelayBetweenPartsOfWaves <= 0) {
+            if (currentWave == null) {
+                if (waves.Empty()) {
+                    return;
+                }
+                currentWave = waves.NextWave();
+            }
+
+            EnemyWavePart part = currentWave.enemies[0];
+
+            while (part.number > 0) {
+                if (SpawnEnemy((int) part.id-1)) {
+                    part.number--;
+                }
+                else {
+                    break;
+                }
+            }
+
+            if (part.number == 0) {
+                currentWave.enemies.RemoveAt(0);
+                currentDelayBetweenPartsOfWaves = Properties.delayBetweenPartsOfWaves;
+            }
+
+            if (currentWave.enemies.Count == 0) {
+                currentWave = null;
+                endOfWave = true;
+            }
+        }
+        else {
+            currentDelayBetweenPartsOfWaves--;
+        }
     }
 
     public static List<Vector2Int> RangeToRangeVectors(int range) {
@@ -528,11 +622,11 @@ public class GameManager : MonoBehaviour {
     public static List<Vector2Int> AttackRangeToRangeVectors(int range) {
        
         List<Vector2Int> vectors = new List<Vector2Int>();
-        Debug.Log(range);
+        
         if (range % 10 == 5) {
             range /= 10;
             range++;
-            Debug.Log(range);
+            
             for (int y = -range; y <= range; y++) {
                 for (int x = -(range - Mathf.Abs(y)); x <= range - Mathf.Abs(y); x++) {
                     if ((x == 0 && y == 0) || (Mathf.Abs(x) == range || Mathf.Abs(y) == range)) {
@@ -542,10 +636,7 @@ public class GameManager : MonoBehaviour {
                     vectors.Add(new Vector2Int(x, y));
                 }
             }
-
-            foreach (var VARIABLE in vectors) {
-                Debug.Log(VARIABLE);
-            }
+            
             return vectors;
         }
 
@@ -575,21 +666,66 @@ public class GameManager : MonoBehaviour {
     private void AddAllUnits() {
         allUnits = new List<GameObject>();
         unitValues = new List<int>();
-        allUnits.Add(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Creatures/Units/SwordsManPrefab.prefab"));
+        //allUnits.Add(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Creatures/Units/SwordsManPrefab.prefab"));
+        allUnits.Add(Resources.Load<GameObject>("Assets/Prefabs/Creatures/Units/SwordsManPrefab.prefab"));
         unitValues.Add(UnitProperties.SwordsmanGoldValue);
     }
 
-    private void AddAllEnemeies() {
+    private void AddAllEnemies() {
         allEnemies = new List<GameObject>();
-        allEnemies.Add(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Creatures/Enemies/GoblinPrefab.prefab"));
-        allEnemies.Add(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Creatures/Enemies/OrcPrefab.prefab"));
+        
+        // allEnemies.Add(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Creatures/Enemies/GoblinPrefab.prefab"));
+        // allEnemies.Add(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Creatures/Enemies/OrcPrefab.prefab"));
+        allEnemies.Add(Resources.Load<GameObject>("Assets/Prefabs/Creatures/Enemies/GoblinPrefab.prefab"));
+        allEnemies.Add(Resources.Load<GameObject>("Assets/Prefabs/Creatures/Enemies/OrcPrefab.prefab"));
     }
 
     public void SelectUnitToSpawn(String unitName) {
+        
         if (Enum.TryParse(unitName, true, out selectedSpawnUnit)) {
 
         }
 
 
+    }
+    
+    
+    public void TestSpawnEnemy(int i) {
+        if (!(i >= 0 && i < allEnemies.Count)) {
+            return;
+        }
+        List<Vector2Int> tempSpawns = new List<Vector2Int>(spawns);
+        Vector2Int spawn = new Vector2Int();
+        bool found = false;
+        while (tempSpawns.Count != 0) {
+            int spawnNumber = Random.Range(0, spawns.Count);
+            spawn = spawns[spawnNumber];
+            if (!map[spawn.x, spawn.y].isEmpty) {
+                tempSpawns.Remove(spawn);
+            }
+            else {
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            return;
+        }
+        
+        Vector3 pos = TileCoordinatesToReal(spawn);
+        if (map[spawn.x, spawn.y].isEmpty && map[spawn.x, spawn.y].isRoad) {
+            GameObject enemyObject = Instantiate(allEnemies[i], pos, Quaternion.identity);
+            BasicEnemy enemy = enemyObject.GetComponent<BasicEnemy>();
+
+            if (enemy != null) {
+                map[spawn.x, spawn.y].isEmpty = false;
+                map[spawn.x, spawn.y].hasEnemy = true;
+                map[spawn.x, spawn.y].enemy = enemy;
+                enemy.SetUp(map, spawn, pathsFromSpawn[spawn],this);
+                enemies.Add(enemy);
+            }
+        }
+        
     }
 }

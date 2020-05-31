@@ -5,7 +5,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-public class BasicEnemy: BasicCreature {
+public abstract class BasicEnemy: BasicCreature {
     
     protected int stamina = 15;
     protected List<Vector2Int> path;
@@ -99,7 +99,6 @@ public class BasicEnemy: BasicCreature {
     public void SetUp(MapTile[,] map, Vector2Int position,List<Vector2Int> path, GameManager manager) {
         base.SetUp(map, position, manager);
         this.path = new List<Vector2Int>(path);
-        goldValue = 50;
     }
 
     void Start() {

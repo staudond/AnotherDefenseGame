@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class Properties
 {
-    
+    public const int delayBetweenPartsOfWaves = 2;
 }
