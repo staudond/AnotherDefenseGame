@@ -21,12 +21,18 @@ public class CameraMovementOperator : MonoBehaviour {
         background = GameObject.Find("Background").GetComponent<Tilemap>();
         cam = Camera.main;
         Bounds camBounds = background.localBounds;
-        Vector3 parentOffset = background.gameObject.GetComponentInParent<Transform>().position; //tilemap has only localBounds so we need into consoderation position of parent
+        Vector3 parentOffset = background.gameObject.GetComponentInParent<Transform>().position; //tilemap has only localBounds so we need to take into consoderation position of parent
         
         cameraMaxPosition = camBounds.max+parentOffset;
 
         cameraMinPosition = camBounds.min+parentOffset;
-        maxCameraSize = (float)background.size.y/2+0.5f;
+        float maxwidth = (camBounds.size.x / 2 + cameraBorderOffset) / cam.aspect;
+        float maxheight = (camBounds.size.y / 2 + cameraBorderOffset);
+         
+        
+        //maxCameraSize = (float)Mathf.Min(background.size.y,background.size.x)/2;
+        maxCameraSize = Mathf.Min(maxwidth, maxheight);
+        
         cameraPixelBorderOffset = 25;
         
     }
@@ -81,10 +87,24 @@ public class CameraMovementOperator : MonoBehaviour {
 
         float cameraHeight = cam.orthographicSize;
         float cameraWidth = cameraHeight * cam.aspect;
-        
         Vector3 position = transform.position;
+		// print("x = "+position.x);
+		//
+		// print(cameraWidth);
+  //       print(cameraHeight);
+  // print("cam aspect "+cam.aspect);
+  //       print("cam min "+ cameraMinPosition.x);  
+		// print("cam mAX "+ cameraMaxPosition.x);
+		// print("min "+(cameraMinPosition.x+cameraWidth-cameraBorderOffset));
+		// print("max "+(cameraMaxPosition.x-cameraWidth+cameraBorderOffset));
+		//
+		
         float x = Mathf.Clamp(position.x, cameraMinPosition.x+cameraWidth-cameraBorderOffset, cameraMaxPosition.x-cameraWidth+cameraBorderOffset);
         float y = Mathf.Clamp(position.y, cameraMinPosition.y+cameraHeight-cameraBorderOffset, cameraMaxPosition.y-cameraHeight+cameraBorderOffset);
+		//print("ff");
+		// print("new x = "+x);
+		//print(y);
+		//print("DD");
         transform.position = new Vector3(x,y,position.z );
     }
 
