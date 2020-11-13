@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
+
 public enum Units{None = 0,SwordsMan = 1}
 public enum Enemies{None = 0, Goblin = 1,Orc = 2}
 
@@ -84,9 +86,9 @@ public class GameManager : MonoBehaviour {
     private Text WaveText;
     private GameObject PhaseText;
     
-    [SerializeField] private int playerLives = 20;
+    [SerializeField] private int playerLives = Properties.playerStartLives;
     
-    [SerializeField] private int playerGold = 200;
+    [SerializeField] private int playerGold = Properties.playerStartGold;
     private GameObject pauseScreen;
     private GameObject gameOverScreen;
     private GameObject winningScreen;
@@ -115,9 +117,9 @@ public class GameManager : MonoBehaviour {
         // highlightingTile = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/HighlightTiles/HighlightTile.prefab");
         // enemyHighlightingTile = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/HighlightTiles/EnemyHighlightTile.prefab");
         // unitHighlightingTile = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/HighlightTiles/UnitHighlightTile.prefab");
-        highlightingTile = Resources.Load<GameObject>("Assets/Prefabs/HighlightTiles/HighlightTile.prefab");
-        enemyHighlightingTile = Resources.Load<GameObject>("Assets/Prefabs/HighlightTiles/EnemyHighlightTile.prefab");
-        unitHighlightingTile = Resources.Load<GameObject>("Assets/Prefabs/HighlightTiles/UnitHighlightTile.prefab");
+        highlightingTile = Resources.Load<GameObject>("Prefabs/HighlightTiles/HighlightTile");
+        enemyHighlightingTile = Resources.Load<GameObject>("Prefabs/HighlightTiles/EnemyHighlightTile");
+        unitHighlightingTile = Resources.Load<GameObject>("Prefabs/HighlightTiles/UnitHighlightTile");
         
         
         LivesText = GameObject.Find("Lives").GetComponent<Text>();
@@ -163,25 +165,25 @@ public class GameManager : MonoBehaviour {
 
     private List<GameObject> hightile;
     void Update() {
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            foreach (var unit in units) {
-                var xs = RangeVectorsToPositions(unit.position,AttackRangeToRangeVectors(unit.AttackRange));
-                
-                
-                foreach (var x in xs) {
-                    if (CheckBounds(x)) {
-                        hightile.Add(Instantiate(enemyHighlightingTile, TileCoordinatesToReal(x), Quaternion.identity));
-                    }
-                }
-            }
-        }
-        if(Input.GetKeyUp(KeyCode.Space))
-        {
-            foreach (var tile in hightile) {
-                Destroy(tile);
-            }
-            hightile.Clear();
-        }
+        // if (Input.GetKeyDown(KeyCode.Space)) {
+        //     foreach (var unit in units) {
+        //         var xs = RangeVectorsToPositions(unit.position,AttackRangeToRangeVectors(unit.AttackRange));
+        //         
+        //         
+        //         foreach (var x in xs) {
+        //             if (CheckBounds(x)) {
+        //                 hightile.Add(Instantiate(enemyHighlightingTile, TileCoordinatesToReal(x), Quaternion.identity));
+        //             }
+        //         }
+        //     }
+        // }
+        // if(Input.GetKeyUp(KeyCode.Space))
+        // {
+        //     foreach (var tile in hightile) {
+        //         Destroy(tile);
+        //     }
+        //     hightile.Clear();
+        // }
 
         LivesText.text = "LIVES: " + playerLives;
         GoldText.text = "GOLD: " + playerGold;
@@ -257,6 +259,8 @@ public class GameManager : MonoBehaviour {
 
                 if (Input.GetKeyDown(KeyCode.Escape)) {
                     selectedUnit = null;
+                    selectedSpawnUnit = Units.None;
+                    EventSystem.current.SetSelectedGameObject(null);
                     StopHighlighting();
                 }
             }
@@ -520,7 +524,9 @@ public class GameManager : MonoBehaviour {
     public void EndTurn() {
         isPlayersTurn = !isPlayersTurn;
         endTurnButton.SetActive(false);
-
+        playerGold += Properties.turnGoldIncrement;
+        
+        
         foreach (var unit in units) {
             unit.ResetAfterTurn();
             unit.Attack();
@@ -667,7 +673,7 @@ public class GameManager : MonoBehaviour {
         allUnits = new List<GameObject>();
         unitValues = new List<int>();
         //allUnits.Add(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Creatures/Units/SwordsManPrefab.prefab"));
-        allUnits.Add(Resources.Load<GameObject>("Assets/Prefabs/Creatures/Units/SwordsManPrefab.prefab"));
+        allUnits.Add(Resources.Load<GameObject>("Prefabs/Creatures/Units/SwordsManPrefab"));
         unitValues.Add(UnitProperties.SwordsmanGoldValue);
     }
 
@@ -676,8 +682,8 @@ public class GameManager : MonoBehaviour {
         
         // allEnemies.Add(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Creatures/Enemies/GoblinPrefab.prefab"));
         // allEnemies.Add(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Creatures/Enemies/OrcPrefab.prefab"));
-        allEnemies.Add(Resources.Load<GameObject>("Assets/Prefabs/Creatures/Enemies/GoblinPrefab.prefab"));
-        allEnemies.Add(Resources.Load<GameObject>("Assets/Prefabs/Creatures/Enemies/OrcPrefab.prefab"));
+        allEnemies.Add(Resources.Load<GameObject>("Prefabs/Creatures/Enemies/GoblinPrefab"));
+        allEnemies.Add(Resources.Load<GameObject>("Prefabs/Creatures/Enemies/OrcPrefab"));
     }
 
     public void SelectUnitToSpawn(String unitName) {
