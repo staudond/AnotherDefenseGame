@@ -735,6 +735,7 @@ MonoBehaviour:
   obj: {fileID: 0}
   playerLives: 20
   playerGold: 400
+  damagePopUp: {fileID: 0}
 --- !u!1 &569202306
 GameObject:
   m_ObjectHideFlags: 0
@@ -8125,7 +8126,7 @@ GameObject:
   - component: {fileID: 1159277098}
   - component: {fileID: 1159277101}
   m_Layer: 0
-  m_Name: Main Camera
+  m_Name: MainCamera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8166,7 +8167,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 6
+  orthographic size: 15
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
