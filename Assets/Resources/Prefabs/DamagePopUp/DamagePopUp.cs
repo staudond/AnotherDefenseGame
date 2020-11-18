@@ -29,7 +29,7 @@ public class DamagePopUp : MonoBehaviour {
         textColor = textMesh.color;
         disappearTimer = DISAPPEAR_TIMER_MAX;
         
-        moveVector = new Vector3(.7f,1)*60f;
+        moveVector = new Vector3(0f,1)*3f;
     }
     
     private void Update() {
@@ -39,12 +39,11 @@ public class DamagePopUp : MonoBehaviour {
             //first half of popup lifetime 
             float increaseScaleAmount = 1f;
             transform.localScale += Vector3.one * (increaseScaleAmount * Time.deltaTime);
-            //textMesh.fontSize = 5;
         } else {
             //second half of popup lifetime
             float decreaseScaleAmount = 1f;
             transform.localScale -= Vector3.one * (decreaseScaleAmount * Time.deltaTime);
-
+        
             
         }
         disappearTimer -= Time.deltaTime;

@@ -54,6 +54,9 @@ TagManager:
   - name: Healtbars
     uniqueID: 3394612877
     locked: 0
+  - name: DamagePopUp
+    uniqueID: 2029744545
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

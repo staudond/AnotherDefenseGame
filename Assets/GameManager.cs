@@ -222,7 +222,7 @@ public class GameManager : MonoBehaviour {
                     if (hit.collider != null) {
                         
                         if (hit.collider.gameObject.GetComponent(typeof(Tilemap)) == roads) {
-                            
+                            //print(selectedSpawnUnit);
                             if (selectedSpawnUnit != Units.None) {
                            
                                 if (unitValues[(int)selectedSpawnUnit-1] <= playerGold) {
@@ -342,7 +342,7 @@ public class GameManager : MonoBehaviour {
         while (true) {
             if (goals.Contains(enemy.position)) {
                 playerLives--;
-                enemy.Death();
+                enemy.Disappear();
                 return;
             }
             Vector2Int nextPosition = enemy.Path[0];

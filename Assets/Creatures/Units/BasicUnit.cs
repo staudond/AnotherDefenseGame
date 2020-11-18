@@ -60,7 +60,7 @@ public abstract class BasicUnit : BasicCreature
         canMove = true;
     }
 
-    public override void Death() {
+    protected override void Death() {
         map[position.x, position.y].isEmpty = true;
         map[position.x, position.y].unit = null;
         map[position.x, position.y].hasUnit = false;

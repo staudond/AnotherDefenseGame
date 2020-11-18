@@ -89,13 +89,14 @@ public abstract class BasicCreature : MonoBehaviour
     
     public virtual void TakeDmg(int dmg) {
         health -= dmg;
+        DamagePopUp.Create(gameObject.transform.position+new Vector3(0f,0.7f), dmg);
         ChangeHealth();
         if (health <= 0) {
             Death();
         }
     }
 
-    public abstract void Death();
+    protected abstract void Death();
 
     protected int CalculateDistance(Vector2Int target)
     {

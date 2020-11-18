@@ -74,23 +74,29 @@ public abstract class BasicEnemy: BasicCreature {
         return false;
     }
 
-    public override void Death() {
+    public void Disappear() {
+        //used when enemy reaches goal
         map[position.x, position.y].isEmpty = true;
         map[position.x, position.y].hasEnemy = false;
         map[position.x, position.y].enemy = null;
         manager.RemoveEnemy(this);
         Destroy(this.gameObject);
     }
-
-    public override void TakeDmg(int dmg) {
-        health -= dmg;
-        ChangeHealth();
-        if (health <= 0) {
-            manager.AddGold(goldValue);
-            Death();
-        }
-        
+    
+    protected override void Death() {
+        //used when enemy is killed
+        manager.AddGold(goldValue);
+        map[position.x, position.y].isEmpty = true;
+        map[position.x, position.y].hasEnemy = false;
+        map[position.x, position.y].enemy = null;
+        manager.RemoveEnemy(this);
+        Destroy(this.gameObject);
     }
+    
+    
+
+    
+    
 
     public override void ResetAfterTurn() {
         
