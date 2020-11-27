@@ -93,7 +93,59 @@ public abstract class BasicEnemy: BasicCreature {
         Destroy(this.gameObject);
     }
     
-    
+    public void Move() {
+        int stamina = this.Stamina;
+        while (true) {
+            if (manager.goals.Contains(this.position)) {
+                //enemy reached goal
+                manager.SubstractLife(this);
+                return;
+            }
+            
+            Vector2Int nextPosition = this.Path[0];
+            
+            if (map[nextPosition.x, nextPosition.y].isEmpty) {
+                //the next position of enemy path is empty
+                int xDiff = Mathf.Abs(this.position.x - nextPosition.x);
+                int yDiff = Mathf.Abs(this.position.y - nextPosition.y);
+                if (xDiff == yDiff && stamina >= 15) {
+                    //moving diagonally
+                    stamina -= 15;
+                }
+                else if (stamina >= 10) {
+                    //moving vertically/horizontally
+                    stamina -= 10;
+                }
+                else {
+                    //not enough stamina to move
+                    break;
+                }
+                
+                //clear current position
+                map[this.position.x, this.position.y].isEmpty = true;
+                map[this.position.x, this.position.y].hasEnemy = false;
+                map[this.position.x, this.position.y].enemy = null;
+                
+                //move to the next position
+                this.position = nextPosition;
+                this.gameObject.transform.position = manager.TileCoordinatesToReal(this.position);
+                
+                map[this.position.x, this.position.y].isEmpty = false;
+                map[this.position.x, this.position.y].hasEnemy = true;
+                map[this.position.x, this.position.y].enemy = this;
+                
+                //remove current position from path
+                this.Path.RemoveAt(0);
+                
+            }
+            else {
+                //next position is occupied
+                break;
+            }
+        }
+        //todo not sure if it should be here or after all enemies finished moving
+        this.Attack();
+    }
 
     
     

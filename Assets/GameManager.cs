@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour {
     private Tilemap goalPositions;
 
     private List<Vector2Int> spawns;
-    private List<Vector2Int> goals;
+    public List<Vector2Int> goals { get; private set; }
     private Dictionary<Vector2Int, List<Vector2Int>> pathsFromSpawn;
     
     private MapTile[,] map;
@@ -55,7 +55,9 @@ public class GameManager : MonoBehaviour {
 
     private bool isPlayersTurn = true;
     private static bool isPaused = false;
-    private bool betweenPhase = false;
+
+    public bool betweenPhase { get; private set; } = false;
+    
     private bool endOfWave = false;
 
     public static bool IsPaused => isPaused;
@@ -80,7 +82,7 @@ public class GameManager : MonoBehaviour {
     private GameObject unitHighlightingTile;
     private List<GameObject> highlightingTiles;
 
-    private List<Vector2Int> highlightedPositions;
+    public List<Vector2Int> highlightedPositions { get; private set; }
     private Text LivesText; 
     private Text GoldText; 
     private Text WaveText;
@@ -98,6 +100,15 @@ public class GameManager : MonoBehaviour {
 
     public int PlayerGold => playerGold;
 
+    public void  SubstractLife(BasicEnemy enemy ) {
+        playerLives--;
+        enemy.Disappear();
+        if (playerLives <= 0) {
+            isGameOver = true;
+            gameOverScreen.SetActive(true);
+        }
+    }
+    
     public void AddGold(int gold) {
         playerGold += gold;
     }
@@ -220,24 +231,26 @@ public class GameManager : MonoBehaviour {
                     Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
                     RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
                     if (hit.collider != null) {
-                        
+                        //we clicked on object with collider(road or unit)
                         if (hit.collider.gameObject.GetComponent(typeof(Tilemap)) == roads) {
+                            //we clicked on road(empty tile)
                             //print(selectedSpawnUnit);
                             if (selectedSpawnUnit != Units.None) {
-                           
+                                //we have selected unit to spawn
                                 if (unitValues[(int)selectedSpawnUnit-1] <= playerGold) {
-                                   
-                                    
-                                    SpawnUnit(cam.ScreenToWorldPoint(Input.mousePosition));
+                                   //we have enough gold 
+                                   SpawnUnit(cam.ScreenToWorldPoint(Input.mousePosition));
                                     selectedSpawnUnit = Units.None;
                                 }
                             }
                             else if (selectedUnit != null) {
-                                MoveUnit(cam.ScreenToWorldPoint(Input.mousePosition));
+                                //we
+                                selectedUnit.Move(cam.ScreenToWorldPoint(Input.mousePosition));
                                 selectedUnit = null;
                             }
                         }
                         else {
+                            //we clicked on unit
                             BasicUnit temp = hit.collider.gameObject.GetComponent(typeof(BasicUnit)) as BasicUnit;
                             if (temp != null) {
                                 selectedUnit = temp;
@@ -271,8 +284,10 @@ public class GameManager : MonoBehaviour {
     }
 
     void HighlightTiles(List<Vector2Int> positions) {
+        //destroy any previous highlighted tiles
         StopHighlighting();
         if (betweenPhase) {
+            //game is in phase between waves
             for (int x = 0; x < mapWidth; x++) {
                 for (int y = 0; y < mapHeight; y++) {
                     if (map[x, y].isRoad && map[x, y].isEmpty && !map[x, y].isSpawn) {
@@ -311,72 +326,48 @@ public class GameManager : MonoBehaviour {
         highlightingTiles.Clear();
 
     }
+    
 
-    void MoveUnit(Vector3 currentPosition) { //todo move to basic unit script
-        if (selectedUnit.CanMove) {
-            Vector2Int tilePosition = RealCoordinatesToNearestTile(currentPosition);
-            Vector3 realPosition = GetNearestPositionOnGrid(currentPosition);
-            foreach (var possiblePosition in highlightedPositions) {
-                if (tilePosition == possiblePosition && map[tilePosition.x, tilePosition.y].isEmpty &&
-                    map[tilePosition.x, tilePosition.y].isRoad && !map[tilePosition.x, tilePosition.y].isSpawn) {
-                    map[selectedUnit.position.x, selectedUnit.position.y].isEmpty = true;
-                    map[selectedUnit.position.x, selectedUnit.position.y].hasUnit = false;
-                    map[selectedUnit.position.x, selectedUnit.position.y].unit = null;
-                    selectedUnit.position = tilePosition;
-                    selectedUnit.gameObject.transform.position = realPosition;
-
-                    map[tilePosition.x, tilePosition.y].isEmpty = false;
-                    map[tilePosition.x, tilePosition.y].hasUnit = true;
-                    map[tilePosition.x, tilePosition.y].unit = selectedUnit;
-                    if (!betweenPhase) {
-                        selectedUnit.CanMove = false;
-                    }
-                }
-            }
-        }
-
-    }
-
-    void MoveEnemy(BasicEnemy enemy) {
-        int stamina = enemy.Stamina;
-        while (true) {
-            if (goals.Contains(enemy.position)) {
-                playerLives--;
-                enemy.Disappear();
-                return;
-            }
-            Vector2Int nextPosition = enemy.Path[0];
-            
-            if (map[nextPosition.x, nextPosition.y].isEmpty) {
-                int xDiff = Mathf.Abs(enemy.position.x - nextPosition.x);
-                int yDiff = Mathf.Abs(enemy.position.y - nextPosition.y);
-                if (xDiff == yDiff && stamina >= 15) {
-                    stamina -= 15;
-                }
-                else if (stamina >= 10) {
-                    stamina -= 10;
-                }
-                else {
-                    break;
-                }
-                
-                map[enemy.position.x, enemy.position.y].isEmpty = true;
-                map[enemy.position.x, enemy.position.y].hasEnemy = false;
-                map[enemy.position.x, enemy.position.y].enemy = null;
-                enemy.position = nextPosition;
-                enemy.gameObject.transform.position = TileCoordinatesToReal(enemy.position);
-                map[enemy.position.x, enemy.position.y].isEmpty = false;
-                map[enemy.position.x, enemy.position.y].hasEnemy = true;
-                map[enemy.position.x, enemy.position.y].enemy = enemy;
-                enemy.Path.RemoveAt(0);
-                
-            }
-            else {
-                break;
-            }
-        }
-        enemy.Attack();
-    }
+    // void MoveEnemy(BasicEnemy enemy) {
+    //     int stamina = enemy.Stamina;
+    //     while (true) {
+    //         if (goals.Contains(enemy.position)) {
+    //             playerLives--;
+    //             enemy.Disappear();
+    //             return;
+    //         }
+    //         Vector2Int nextPosition = enemy.Path[0];
+    //         
+    //         if (map[nextPosition.x, nextPosition.y].isEmpty) {
+    //             int xDiff = Mathf.Abs(enemy.position.x - nextPosition.x);
+    //             int yDiff = Mathf.Abs(enemy.position.y - nextPosition.y);
+    //             if (xDiff == yDiff && stamina >= 15) {
+    //                 stamina -= 15;
+    //             }
+    //             else if (stamina >= 10) {
+    //                 stamina -= 10;
+    //             }
+    //             else {
+    //                 break;
+    //             }
+    //             
+    //             map[enemy.position.x, enemy.position.y].isEmpty = true;
+    //             map[enemy.position.x, enemy.position.y].hasEnemy = false;
+    //             map[enemy.position.x, enemy.position.y].enemy = null;
+    //             enemy.position = nextPosition;
+    //             enemy.gameObject.transform.position = TileCoordinatesToReal(enemy.position);
+    //             map[enemy.position.x, enemy.position.y].isEmpty = false;
+    //             map[enemy.position.x, enemy.position.y].hasEnemy = true;
+    //             map[enemy.position.x, enemy.position.y].enemy = enemy;
+    //             enemy.Path.RemoveAt(0);
+    //             
+    //         }
+    //         else {
+    //             break;
+    //         }
+    //     }
+    //     enemy.Attack();
+    // }
 
     
 
@@ -415,12 +406,12 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    Vector3 GetNearestPositionOnGrid(Vector3 position) {
+    public Vector3 GetNearestPositionOnGrid(Vector3 position) {
         return TileCoordinatesToReal(RealCoordinatesToNearestTile(position));
         ;
     }
 
-    Vector3 TileCoordinatesToReal(Vector2Int tileCoordinates) {
+    public Vector3 TileCoordinatesToReal(Vector2Int tileCoordinates) {
         tileCoordinates.y = (tileCoordinates.y - mapHeight + 1) * (-1); //move [0,0] back to bottom left corner
 
         tileCoordinates.x -=
@@ -436,7 +427,7 @@ public class GameManager : MonoBehaviour {
         return coordinates;
     }
 
-    Vector2Int RealCoordinatesToNearestTile(Vector3 realCoordinates) {
+    public Vector2Int RealCoordinatesToNearestTile(Vector3 realCoordinates) {
         //Unity uses center as position, not left corner, so to compensate offset(half of tile size) is needed
         realCoordinates -= mapOffset;
         Vector2Int coordinates = new Vector2Int(Mathf.RoundToInt((realCoordinates.x - tileOffset) / tileSize),
@@ -548,8 +539,7 @@ public class GameManager : MonoBehaviour {
     void EnemyTurn() {
         for (int i = enemies.Count-1 ; i >=0; --i) {
             enemies[i].ResetAfterTurn();
-            
-            MoveEnemy(enemies[i]);
+            enemies[i].Move();
         }
 
         if (!endOfWave) {

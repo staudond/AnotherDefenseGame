@@ -60,6 +60,31 @@ public abstract class BasicUnit : BasicCreature
         canMove = true;
     }
 
+    public void Move(Vector3 targetPosition) {
+        if (this.CanMove) {
+            Vector2Int tileTargetPosition = manager.RealCoordinatesToNearestTile(targetPosition);
+            Vector3 realTargetPosition = manager.GetNearestPositionOnGrid(targetPosition);
+            foreach (var possiblePosition in manager.highlightedPositions) {
+                if (tileTargetPosition == possiblePosition && map[tileTargetPosition.x, tileTargetPosition.y].isEmpty &&
+                    map[tileTargetPosition.x, tileTargetPosition.y].isRoad && !map[tileTargetPosition.x, tileTargetPosition.y].isSpawn) {
+                    map[this.position.x, this.position.y].isEmpty = true;
+                    map[this.position.x, this.position.y].hasUnit = false;
+                    map[this.position.x, this.position.y].unit = null;
+                    this.position = tileTargetPosition;
+                    this.gameObject.transform.position = realTargetPosition;
+
+                    map[tileTargetPosition.x, tileTargetPosition.y].isEmpty = false;
+                    map[tileTargetPosition.x, tileTargetPosition.y].hasUnit = true;
+                    map[tileTargetPosition.x, tileTargetPosition.y].unit = this;
+                    if (!manager.betweenPhase) {
+                        this.CanMove = false;
+                    }
+                }
+            }
+        }
+        
+    }
+
     protected override void Death() {
         map[position.x, position.y].isEmpty = true;
         map[position.x, position.y].unit = null;

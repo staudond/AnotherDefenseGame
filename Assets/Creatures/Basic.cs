@@ -79,6 +79,8 @@ public abstract class BasicCreature : MonoBehaviour
         }
     }
 
+    
+    
     protected abstract bool IndividualAttack();
 
     protected void ChangeHealth() {
