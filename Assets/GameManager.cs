@@ -328,49 +328,6 @@ public class GameManager : MonoBehaviour {
     }
     
 
-    // void MoveEnemy(BasicEnemy enemy) {
-    //     int stamina = enemy.Stamina;
-    //     while (true) {
-    //         if (goals.Contains(enemy.position)) {
-    //             playerLives--;
-    //             enemy.Disappear();
-    //             return;
-    //         }
-    //         Vector2Int nextPosition = enemy.Path[0];
-    //         
-    //         if (map[nextPosition.x, nextPosition.y].isEmpty) {
-    //             int xDiff = Mathf.Abs(enemy.position.x - nextPosition.x);
-    //             int yDiff = Mathf.Abs(enemy.position.y - nextPosition.y);
-    //             if (xDiff == yDiff && stamina >= 15) {
-    //                 stamina -= 15;
-    //             }
-    //             else if (stamina >= 10) {
-    //                 stamina -= 10;
-    //             }
-    //             else {
-    //                 break;
-    //             }
-    //             
-    //             map[enemy.position.x, enemy.position.y].isEmpty = true;
-    //             map[enemy.position.x, enemy.position.y].hasEnemy = false;
-    //             map[enemy.position.x, enemy.position.y].enemy = null;
-    //             enemy.position = nextPosition;
-    //             enemy.gameObject.transform.position = TileCoordinatesToReal(enemy.position);
-    //             map[enemy.position.x, enemy.position.y].isEmpty = false;
-    //             map[enemy.position.x, enemy.position.y].hasEnemy = true;
-    //             map[enemy.position.x, enemy.position.y].enemy = enemy;
-    //             enemy.Path.RemoveAt(0);
-    //             
-    //         }
-    //         else {
-    //             break;
-    //         }
-    //     }
-    //     enemy.Attack();
-    // }
-
-    
-
     void InitializeMap() {
         pathsFromSpawn = new Dictionary<Vector2Int, List<Vector2Int>>();
         map = new MapTile[mapWidth, mapHeight];
@@ -541,7 +498,11 @@ public class GameManager : MonoBehaviour {
             enemies[i].ResetAfterTurn();
             enemies[i].Move();
         }
-
+        
+        for (int i = enemies.Count-1; i >= 0; --i) {
+            enemies[i].Attack();
+        }
+        
         if (!endOfWave) {
             SpawnWave();
         }

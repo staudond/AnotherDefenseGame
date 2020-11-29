@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SwordsMan : BasicUnit
-{
-    public SwordsMan(Vector2Int pos) : base(pos) {
-    }
-    // Start is called before the first frame update
-    void Awake() {
+public class SwordsMan : BasicUnit {
+    public SwordsMan(Vector2Int pos) : base(pos) { }
+
+   
+    protected override void Awake() {
+        base.Awake();
         damage = UnitProperties.SwordsmanDmg;
         maxHealth = UnitProperties.SwordsmanHp;
         attackSpeed = UnitProperties.SwordsmanAttackSpeed;
@@ -19,9 +19,5 @@ public class SwordsMan : BasicUnit
         canMove = true;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

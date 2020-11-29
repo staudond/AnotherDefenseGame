@@ -128,7 +128,8 @@ public abstract class BasicEnemy: BasicCreature {
                 
                 //move to the next position
                 this.position = nextPosition;
-                this.gameObject.transform.position = manager.TileCoordinatesToReal(this.position);
+                movePosition.SetMovePosition(manager.TileCoordinatesToReal(this.position));
+                //this.gameObject.transform.position = manager.TileCoordinatesToReal(this.position);
                 
                 map[this.position.x, this.position.y].isEmpty = false;
                 map[this.position.x, this.position.y].hasEnemy = true;
@@ -159,7 +160,9 @@ public abstract class BasicEnemy: BasicCreature {
         this.path = new List<Vector2Int>(path);
     }
 
-    void Start() {
-        
+    protected virtual void Awake() {
+        movePosition = GetComponent<MovePosition>();
     }
+
+   
 }

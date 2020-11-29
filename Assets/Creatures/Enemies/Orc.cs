@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class Orc : BasicEnemy
 {
     public Orc(Vector2Int pos) : base(pos) { }
 
     void Awake() {
+        base.Awake();
         damage = EnemyProperties.OrcDmg;
         maxHealth = EnemyProperties.OrcHp;
         attackSpeed = EnemyProperties.OrcAttackSpeed;
@@ -17,4 +19,6 @@ public class Orc : BasicEnemy
         health = maxHealth;
         remainingAttackCooldown = 0;
     }
+
+    
 }

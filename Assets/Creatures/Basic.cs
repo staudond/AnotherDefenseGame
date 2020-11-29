@@ -13,6 +13,8 @@ public abstract class BasicCreature : MonoBehaviour
     public event EventHandler OnHealthChanged;
     public Vector2Int position;
     protected MapTile[,] map;
+    
+    protected MovePosition movePosition;
 
     public int MaxHealth => maxHealth;
 
@@ -30,6 +32,13 @@ public abstract class BasicCreature : MonoBehaviour
     protected int health;
     protected GameManager manager;
     protected int goldValue = 1;
+    protected float moveSpeed;
+    
+    protected Vector3 velocityVector;
+
+    public void SetVelocity(Vector3 velocity) {
+        velocityVector = velocity;
+    }
 
     public int GoldValue => goldValue;
 
@@ -46,6 +55,7 @@ public abstract class BasicCreature : MonoBehaviour
         this.map = map;
         this.manager = manager;
         health = maxHealth;
+        moveSpeed = 2;
         //canMove = true;
      }
 
@@ -126,5 +136,10 @@ public abstract class BasicCreature : MonoBehaviour
         attackRange = 2;
         health = maxHealth;
         remainingAttackCooldown = 0;
+        //movePosition = GetComponent<MovePosition>();
+    }
+
+    protected void Update() {
+        transform.position += velocityVector * moveSpeed * Time.deltaTime;
     }
 }

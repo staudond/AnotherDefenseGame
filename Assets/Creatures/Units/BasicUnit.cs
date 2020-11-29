@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -8,15 +9,18 @@ using UnityEditor;
 
 public abstract class BasicUnit : BasicCreature
 {
+    
     protected bool canMove;
+    
 
     public bool CanMove {
         get => canMove;
         set => canMove = value;
     }
 
-    void Awake() {
+    protected virtual void Awake() {
         canMove = true;
+        movePosition = GetComponent<MovePosition>();
         //goldValue = 10;
     }
     public BasicUnit(Vector2Int pos) : base(pos) {
@@ -59,31 +63,46 @@ public abstract class BasicUnit : BasicCreature
     public override void ResetAfterTurn() {
         canMove = true;
     }
-
+    
     public void Move(Vector3 targetPosition) {
         if (this.CanMove) {
+            //unit didn't move this round
             Vector2Int tileTargetPosition = manager.RealCoordinatesToNearestTile(targetPosition);
             Vector3 realTargetPosition = manager.GetNearestPositionOnGrid(targetPosition);
-            foreach (var possiblePosition in manager.highlightedPositions) {
-                if (tileTargetPosition == possiblePosition && map[tileTargetPosition.x, tileTargetPosition.y].isEmpty &&
-                    map[tileTargetPosition.x, tileTargetPosition.y].isRoad && !map[tileTargetPosition.x, tileTargetPosition.y].isSpawn) {
-                    map[this.position.x, this.position.y].isEmpty = true;
-                    map[this.position.x, this.position.y].hasUnit = false;
-                    map[this.position.x, this.position.y].unit = null;
-                    this.position = tileTargetPosition;
-                    this.gameObject.transform.position = realTargetPosition;
 
-                    map[tileTargetPosition.x, tileTargetPosition.y].isEmpty = false;
-                    map[tileTargetPosition.x, tileTargetPosition.y].hasUnit = true;
-                    map[tileTargetPosition.x, tileTargetPosition.y].unit = this;
-                    if (!manager.betweenPhase) {
-                        this.CanMove = false;
-                    }
+            if (manager.highlightedPositions.Contains(tileTargetPosition) &&
+                map[tileTargetPosition.x, tileTargetPosition.y].isEmpty &&
+                map[tileTargetPosition.x, tileTargetPosition.y].isRoad &&
+                !map[tileTargetPosition.x, tileTargetPosition.y].isSpawn) {
+                
+                map[this.position.x, this.position.y].isEmpty = true;
+                map[this.position.x, this.position.y].hasUnit = false;
+                map[this.position.x, this.position.y].unit = null;
+                this.position = tileTargetPosition;
+                if (!manager.betweenPhase) {
+                    //game is not in phase between waves
+                    movePosition.SetMovePosition(realTargetPosition);
+                    //this.gameObject.transform.position = realTargetPosition;
+                    this.CanMove = false;
                 }
+                else {
+                    //game is in phase between games
+                    
+                    this.gameObject.transform.position = realTargetPosition;
+                    movePosition.SetMovePosition(realTargetPosition);
+                }
+                
+                
+
+                map[tileTargetPosition.x, tileTargetPosition.y].isEmpty = false;
+                map[tileTargetPosition.x, tileTargetPosition.y].hasUnit = true;
+                map[tileTargetPosition.x, tileTargetPosition.y].unit = this;
+               
             }
         }
-        
     }
+
+    
 
     protected override void Death() {
         map[position.x, position.y].isEmpty = true;

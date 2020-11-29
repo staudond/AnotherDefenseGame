@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   position: {x: 0, y: 0}
+  attackRange: 0
 --- !u!1001 &8805024417570171189
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38,7 +39,7 @@ PrefabInstance:
     - target: {fileID: 4660594004948778224, guid: 30bdf145e2aac71a48cb5f231857d19f,
         type: 3}
       propertyPath: m_SortingLayer
-      value: -1
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 4660594004948778224, guid: 30bdf145e2aac71a48cb5f231857d19f,
         type: 3}

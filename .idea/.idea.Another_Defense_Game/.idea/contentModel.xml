@@ -18,6 +18,7 @@
           <e p="HealthBar.cs" t="Include" />
           <e p="Units" t="Include">
             <e p="BasicUnit.cs" t="Include" />
+            <e p="MovePosition.cs" t="Include" />
             <e p="SwordsMan.cs" t="Include" />
           </e>
         </e>

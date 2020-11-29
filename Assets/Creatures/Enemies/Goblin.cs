@@ -7,6 +7,7 @@ public class Goblin : BasicEnemy
     public Goblin(Vector2Int pos) : base(pos) { }
 
     void Awake() {
+        base.Awake();
         damage = EnemyProperties.GoblinDmg;
         maxHealth = EnemyProperties.GoblinHp;
         attackSpeed = EnemyProperties.GoblinAttackSpeed;
@@ -18,5 +19,5 @@ public class Goblin : BasicEnemy
         remainingAttackCooldown = 0;
     }
 
-   
+    
 }
