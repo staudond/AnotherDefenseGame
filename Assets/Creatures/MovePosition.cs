@@ -17,7 +17,7 @@ public class MovePosition : MonoBehaviour {
     void Update()
     {
         Vector3 moveDir = (movePosition - transform.position).normalized;
-        if (Vector3.Distance(movePosition, transform.position) < 0.01f) {
+        if (Vector3.Distance(movePosition, transform.position) < 0.1f) {
             moveDir = Vector3.zero; // Stop moving when near
             transform.position = movePosition;
         }

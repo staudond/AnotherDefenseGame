@@ -55,7 +55,7 @@ public abstract class BasicCreature : MonoBehaviour
         this.map = map;
         this.manager = manager;
         health = maxHealth;
-        moveSpeed = Properties.moveSpeed;
+        moveSpeed = Properties.animMoveSpeed;
         //canMove = true;
      }
 
