@@ -477,7 +477,7 @@ public class GameManager : MonoBehaviour {
         
         foreach (var unit in units) {
             unit.ResetAfterTurn();
-            unit.Attack();
+            StartCoroutine(unit.Attack());
         }
         
         if (betweenPhase) {
@@ -500,7 +500,7 @@ public class GameManager : MonoBehaviour {
         }
         
         for (int i = enemies.Count-1; i >= 0; --i) {
-            enemies[i].Attack();
+            StartCoroutine(enemies[i].Attack());
         }
         
         if (!endOfWave) {

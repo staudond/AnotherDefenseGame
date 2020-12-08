@@ -45,14 +45,9 @@ public abstract class BasicUnit : BasicCreature
                 }
             }
         }
-
         
-        if (target != null) {
-            target.TakeDmg(damage);
-            return true;
-        }
-
-        return false;
+        return DoIndividualAttack(target);
+        
     }
 
     public override void SetUp(MapTile[,] map, Vector2Int position, GameManager manager) {

@@ -8,5 +8,7 @@ public class Properties
 	public const int playerStartLives = 20;
 	public const int turnGoldIncrement = 10;
     public const int delayBetweenPartsOfWaves = 2;
-    
-}
+    public const float moveSpeed = 5f;
+    public const float nextAttackDelay = 0.75f;
+    public const float popUpDisappearTimer = 0.75f;
+}	

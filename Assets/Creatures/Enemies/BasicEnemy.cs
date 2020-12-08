@@ -24,10 +24,9 @@ public abstract class BasicEnemy: BasicCreature {
     protected override bool IndividualAttack() {
         BasicUnit target = null;
         int targetDistance = int.MaxValue;
-        
         if (map[path[0].x, path[0].y].hasUnit) {
-            map[path[0].x, path[0].y].unit.TakeDmg(damage);
-            return true;
+            
+            return DoIndividualAttack(map[path[0].x, path[0].y].unit);
         }
         
         List<Vector2Int> attackPositions = GameManager.RangeVectorsToPositions(position,GameManager.AttackRangeToRangeVectors(AttackRange));
@@ -64,14 +63,11 @@ public abstract class BasicEnemy: BasicCreature {
                 }
             }
         }
-
-
-        if (target != null) {
-            target.TakeDmg(damage);
-            return true;
-        }
-
-        return false;
+        
+        
+        
+        return DoIndividualAttack(target);
+       
     }
 
     public void Disappear() {

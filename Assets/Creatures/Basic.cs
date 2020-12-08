@@ -55,7 +55,7 @@ public abstract class BasicCreature : MonoBehaviour
         this.map = map;
         this.manager = manager;
         health = maxHealth;
-        moveSpeed = 2;
+        moveSpeed = Properties.moveSpeed;
         //canMove = true;
      }
 
@@ -67,24 +67,20 @@ public abstract class BasicCreature : MonoBehaviour
         return (float)health / maxHealth;
     }
 
-    public void Attack() {
+    public IEnumerator Attack() {
         if (remainingAttackCooldown > 0) {
             remainingAttackCooldown--;
         }
         else {
-            bool didAttack = false;
             for (int i = 0; i < attackSpeed; i++) {
                 if (IndividualAttack()) {
-                    didAttack = true;
+                    remainingAttackCooldown = attackCooldown;
+                    yield return new WaitForSeconds(Properties.nextAttackDelay);
                 }
-                else {
+                else{
                     break;
                 }
 
-            }
-
-            if (didAttack) {
-                remainingAttackCooldown = attackCooldown;
             }
         }
     }
@@ -92,7 +88,15 @@ public abstract class BasicCreature : MonoBehaviour
     
     
     protected abstract bool IndividualAttack();
-
+    
+    protected bool DoIndividualAttack(BasicCreature target) {
+        if (target != null) {
+            target.TakeDmg(damage);
+            return true;
+        }
+        return false;
+    }
+    
     protected void ChangeHealth() {
         if (OnHealthChanged != null) {
             OnHealthChanged(this,EventArgs.Empty);

@@ -9,7 +9,7 @@ public class DamagePopUp : MonoBehaviour {
     private TextMeshPro textMesh;
     private float disappearTimer;
     private Color textColor;
-    private float DISAPPEAR_TIMER_MAX = 1f;
+    private float DISAPPEAR_TIMER_MAX = Properties.popUpDisappearTimer;
     private Vector3 moveVector;
     
     public static DamagePopUp Create(Vector3 pos, int dmg) {
