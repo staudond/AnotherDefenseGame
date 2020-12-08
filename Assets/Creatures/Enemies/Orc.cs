@@ -7,7 +7,7 @@ public class Orc : BasicEnemy
 {
     public Orc(Vector2Int pos) : base(pos) { }
 
-    void Awake() {
+    protected override void Awake() {
         base.Awake();
         damage = EnemyProperties.OrcDmg;
         maxHealth = EnemyProperties.OrcHp;

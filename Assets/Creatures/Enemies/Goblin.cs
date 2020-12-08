@@ -6,7 +6,7 @@ public class Goblin : BasicEnemy
 {
     public Goblin(Vector2Int pos) : base(pos) { }
 
-    void Awake() {
+    protected override void  Awake() {
         base.Awake();
         damage = EnemyProperties.GoblinDmg;
         maxHealth = EnemyProperties.GoblinHp;
