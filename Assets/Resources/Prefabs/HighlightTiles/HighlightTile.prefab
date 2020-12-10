@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1654591457712769898}
   - component: {fileID: 3157703802911490416}
   m_Layer: 0
-  m_Name: HighlighTile
+  m_Name: HighlightTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67,8 +67,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1421414933
+  m_SortingLayer: -4
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 8093fca12e2c90a308d204b2ad8d0024, type: 3}
   m_Color: {r: 0.43529412, g: 1, b: 0, a: 0.84313726}

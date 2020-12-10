@@ -78,8 +78,8 @@ public class GameManager : MonoBehaviour {
     private float tileSize;
 
     private GameObject highlightingTile;
-    private GameObject enemyHighlightingTile;
-    private GameObject unitHighlightingTile;
+    public GameObject enemyHighlightingTile{ get; private set; }
+    public GameObject unitHighlightingTile{ get; private set; }
     private List<GameObject> highlightingTiles;
 
     public List<Vector2Int> highlightedPositions { get; private set; }
@@ -125,9 +125,6 @@ public class GameManager : MonoBehaviour {
         goalPositions = GameObject.Find("GoalPositions").GetComponent<Tilemap>();
         background = GameObject.Find("Background").GetComponent<Tilemap>();
         endTurnButton = GameObject.FindWithTag("EndTurnButton");
-        // highlightingTile = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/HighlightTiles/HighlightTile.prefab");
-        // enemyHighlightingTile = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/HighlightTiles/EnemyHighlightTile.prefab");
-        // unitHighlightingTile = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/HighlightTiles/UnitHighlightTile.prefab");
         highlightingTile = Resources.Load<GameObject>("Prefabs/HighlightTiles/HighlightTile");
         enemyHighlightingTile = Resources.Load<GameObject>("Prefabs/HighlightTiles/EnemyHighlightTile");
         unitHighlightingTile = Resources.Load<GameObject>("Prefabs/HighlightTiles/UnitHighlightTile");
@@ -231,20 +228,27 @@ public class GameManager : MonoBehaviour {
                     Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
                     RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
                     if (hit.collider != null) {
-                        //we clicked on object with collider(road or unit)
+                        //clicked on object with collider(road or unit)
                         if (hit.collider.gameObject.GetComponent(typeof(Tilemap)) == roads) {
-                            //we clicked on road(empty tile)
-                            //print(selectedSpawnUnit);
+                            //clicked on road(empty tile)
                             if (selectedSpawnUnit != Units.None) {
-                                //we have selected unit to spawn
-                                if (unitValues[(int)selectedSpawnUnit-1] <= playerGold) {
-                                   //we have enough gold 
-                                   SpawnUnit(cam.ScreenToWorldPoint(Input.mousePosition));
-                                    selectedSpawnUnit = Units.None;
+                                //there is selected unit to spawn
+                                if (unitValues[(int) selectedSpawnUnit - 1] <= playerGold) {
+                                    //player have enough gold 
+                                    GameObject current = EventSystem.current.currentSelectedGameObject;
+
+                                    SpawnUnit(cam.ScreenToWorldPoint(Input.mousePosition));
+                                    if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
+                                        EventSystem.current.SetSelectedGameObject(current);
+                                        
+                                    }
+                                    else {
+                                        selectedSpawnUnit = Units.None;
+                                    }
                                 }
                             }
                             else if (selectedUnit != null) {
-                                //we
+                                //player selected unit
                                 selectedUnit.Move(cam.ScreenToWorldPoint(Input.mousePosition));
                                 selectedUnit = null;
                             }
@@ -266,8 +270,8 @@ public class GameManager : MonoBehaviour {
                     }
 
                     StopHighlighting();
-                    selectedUnit = null;
-                    selectedSpawnUnit = Units.None;
+                    //selectedUnit = null;
+                    //selectedSpawnUnit = Units.None;
                 }
 
                 if (Input.GetKeyDown(KeyCode.Escape)) {

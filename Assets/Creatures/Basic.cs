@@ -23,7 +23,7 @@ public abstract class BasicCreature : MonoBehaviour
     public int AttackSpeed => attackSpeed;
 
     public int AttackCooldown => attackCooldown;
-
+    protected List<GameObject> highlightTiles;
     protected int maxHealth;
     protected int damage ;
     protected  int attackSpeed; //number of attack creature can do at once when attacks
@@ -56,6 +56,7 @@ public abstract class BasicCreature : MonoBehaviour
         this.manager = manager;
         health = maxHealth;
         moveSpeed = Properties.animMoveSpeed;
+        highlightTiles = new List<GameObject>();
         //canMove = true;
      }
 
@@ -76,6 +77,10 @@ public abstract class BasicCreature : MonoBehaviour
                 if (IndividualAttack()) {
                     remainingAttackCooldown = attackCooldown;
                     yield return new WaitForSeconds(Properties.nextAttackDelay);
+                    foreach (var tile in highlightTiles) {
+                        Destroy(tile);
+                    }
+                    highlightTiles.Clear();
                 }
                 else{
                     break;
@@ -91,6 +96,9 @@ public abstract class BasicCreature : MonoBehaviour
     
     protected bool DoIndividualAttack(BasicCreature target) {
         if (target != null) {
+            
+            highlightTiles.Add(Instantiate(manager.unitHighlightingTile,gameObject.transform.position,Quaternion.identity));
+            highlightTiles.Add(Instantiate(manager.enemyHighlightingTile,target.gameObject.transform.position,Quaternion.identity));
             target.TakeDmg(damage);
             return true;
         }

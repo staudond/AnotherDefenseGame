@@ -48,6 +48,9 @@ TagManager:
   - name: Road
     uniqueID: 1645776085
     locked: 0
+  - name: HighlightTiles
+    uniqueID: 2873552363
+    locked: 0
   - name: Units
     uniqueID: 3244940393
     locked: 0
