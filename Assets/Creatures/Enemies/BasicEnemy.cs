@@ -124,7 +124,8 @@ public abstract class BasicEnemy: BasicCreature {
                 
                 //move to the next position
                 this.position = nextPosition;
-                movePosition.SetMovePosition(manager.TileCoordinatesToReal(this.position));
+                StartCoroutine(Movement(manager.TileCoordinatesToReal(this.position)));
+                // movePosition.SetMovePosition(manager.TileCoordinatesToReal(this.position));
                 //this.gameObject.transform.position = manager.TileCoordinatesToReal(this.position);
                 
                 map[this.position.x, this.position.y].isEmpty = false;
@@ -157,7 +158,6 @@ public abstract class BasicEnemy: BasicCreature {
     }
 
     protected virtual void Awake() {
-        movePosition = GetComponent<MovePosition>();
     }
 
    

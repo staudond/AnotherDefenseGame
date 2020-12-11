@@ -20,7 +20,7 @@ public abstract class BasicUnit : BasicCreature
 
     protected virtual void Awake() {
         canMove = true;
-        movePosition = GetComponent<MovePosition>();
+        //movePosition = GetComponent<MovePosition>();
         //goldValue = 10;
     }
     public BasicUnit(Vector2Int pos) : base(pos) {
@@ -76,7 +76,8 @@ public abstract class BasicUnit : BasicCreature
                 this.position = tileTargetPosition;
                 if (!manager.betweenPhase) {
                     //game is not in phase between waves
-                    movePosition.SetMovePosition(realTargetPosition);
+                    //movePosition.SetMovePosition(realTargetPosition);
+                    StartCoroutine(Movement(realTargetPosition));
                     //this.gameObject.transform.position = realTargetPosition;
                     this.CanMove = false;
                 }
@@ -84,7 +85,7 @@ public abstract class BasicUnit : BasicCreature
                     //game is in phase between games
                     
                     this.gameObject.transform.position = realTargetPosition;
-                    movePosition.SetMovePosition(realTargetPosition);
+                    //movePosition.SetMovePosition(realTargetPosition);
                 }
                 
                 

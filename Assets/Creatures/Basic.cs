@@ -14,7 +14,7 @@ public abstract class BasicCreature : MonoBehaviour
     public Vector2Int position;
     protected MapTile[,] map;
     
-    protected MovePosition movePosition;
+    //protected MovePosition movePosition;
 
     public int MaxHealth => maxHealth;
 
@@ -138,6 +138,20 @@ public abstract class BasicCreature : MonoBehaviour
         //canMove = true;
         health = maxHealth;
     }
+
+    protected IEnumerator  Movement(Vector3 movePosition) {
+        while (true) {
+            Vector3 moveDir = (movePosition - transform.position).normalized;
+            if (Vector3.Distance(movePosition, transform.position) < 0.1f) {
+                //moveDir = Vector3.zero; // Stop moving when near
+                transform.position = movePosition;
+                break;
+            }
+
+            transform.position += moveDir * moveSpeed * Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+    }
     
     void Awake()
     {
@@ -152,6 +166,6 @@ public abstract class BasicCreature : MonoBehaviour
     }
 
     protected void Update() {
-        transform.position += velocityVector * moveSpeed * Time.deltaTime;
+        
     }
 }
