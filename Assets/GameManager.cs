@@ -223,7 +223,7 @@ public class GameManager : MonoBehaviour {
                 }
 
                 if (Input.GetMouseButtonDown(0)) {
-
+                    //left mouse click
                     Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
                     Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
                     RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
@@ -248,30 +248,37 @@ public class GameManager : MonoBehaviour {
                                 }
                             }
                             else if (selectedUnit != null) {
-                                //player selected unit
+                                //player has selected unit
                                 selectedUnit.Move(cam.ScreenToWorldPoint(Input.mousePosition));
                                 selectedUnit = null;
+                                StopHighlighting();
                             }
                         }
                         else {
                             //we clicked on unit
+                            StopHighlighting();
                             BasicUnit temp = hit.collider.gameObject.GetComponent(typeof(BasicUnit)) as BasicUnit;
                             if (temp != null) {
                                 selectedUnit = temp;
                                 selectedSpawnUnit = Units.None;
+                                highlightingTiles.Add(Instantiate(unitHighlightingTile,selectedUnit.gameObject.transform.position,Quaternion.identity));
                                 if (temp.CanMove) {
                                     HighlightTiles(RangeVectorsToPositions(temp.position,
                                         RangeToRangeVectors(UnitProperties.UnitMovementRange)));
-                                    return;
+                                    
                                 }
 
                             }
                         }
                     }
+                    else {
+                        //clicked elsewhere on the screen
+                        StopHighlighting();
+                        selectedUnit = null;
+                        selectedSpawnUnit = Units.None;
+                    }
 
-                    StopHighlighting();
-                    //selectedUnit = null;
-                    //selectedSpawnUnit = Units.None;
+                   
                 }
 
                 if (Input.GetKeyDown(KeyCode.Escape)) {
@@ -289,7 +296,7 @@ public class GameManager : MonoBehaviour {
 
     void HighlightTiles(List<Vector2Int> positions) {
         //destroy any previous highlighted tiles
-        StopHighlighting();
+        //StopHighlighting();
         if (betweenPhase) {
             //game is in phase between waves
             for (int x = 0; x < mapWidth; x++) {
