@@ -65,7 +65,7 @@ PrefabInstance:
     - target: {fileID: 2946139705477224811, guid: 12d1b906a41fe8467b3103f888debe2a,
         type: 3}
       propertyPath: m_Name
-      value: UnitHighlighTile
+      value: UnitHighlightTile
       objectReference: {fileID: 0}
     - target: {fileID: 3157703802911490416, guid: 12d1b906a41fe8467b3103f888debe2a,
         type: 3}
@@ -87,5 +87,25 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 6987304230297092744, guid: 12d1b906a41fe8467b3103f888debe2a,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6987304230297092744, guid: 12d1b906a41fe8467b3103f888debe2a,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.992867
+      objectReference: {fileID: 0}
+    - target: {fileID: 6987304230297092744, guid: 12d1b906a41fe8467b3103f888debe2a,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6987304230297092744, guid: 12d1b906a41fe8467b3103f888debe2a,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.84313726
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 12d1b906a41fe8467b3103f888debe2a, type: 3}

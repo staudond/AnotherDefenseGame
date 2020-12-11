@@ -65,7 +65,7 @@ PrefabInstance:
     - target: {fileID: 2946139705477224811, guid: 12d1b906a41fe8467b3103f888debe2a,
         type: 3}
       propertyPath: m_Name
-      value: EnemyHighlighTile
+      value: EnemyHighlightTile
       objectReference: {fileID: 0}
     - target: {fileID: 3157703802911490416, guid: 12d1b906a41fe8467b3103f888debe2a,
         type: 3}
@@ -76,6 +76,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Color.g
       value: 0.14431219
+      objectReference: {fileID: 0}
+    - target: {fileID: 6987304230297092744, guid: 12d1b906a41fe8467b3103f888debe2a,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6987304230297092744, guid: 12d1b906a41fe8467b3103f888debe2a,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.14509805
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 12d1b906a41fe8467b3103f888debe2a, type: 3}
