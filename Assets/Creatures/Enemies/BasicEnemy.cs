@@ -124,7 +124,7 @@ public abstract class BasicEnemy: BasicCreature {
                 
                 //move to the next position
                 this.position = nextPosition;
-                StartCoroutine(Movement(manager.TileCoordinatesToReal(this.position)));
+                
                 // movePosition.SetMovePosition(manager.TileCoordinatesToReal(this.position));
                 //this.gameObject.transform.position = manager.TileCoordinatesToReal(this.position);
                 
@@ -141,8 +141,9 @@ public abstract class BasicEnemy: BasicCreature {
                 break;
             }
         }
-        //todo not sure if it should be here or after all enemies finished moving
-        this.Attack();
+        StartCoroutine(Movement(manager.TileCoordinatesToReal(this.position)));
+        // //todo not sure if it should be here or after all enemies finished moving
+        // this.Attack();
     }
 
     

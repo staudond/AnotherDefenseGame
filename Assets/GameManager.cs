@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -24,6 +25,13 @@ public class MapTile {
 }
 
 public class GameManager : MonoBehaviour {
+    public enum State {
+        Idle,
+        Moving,
+        Attacking
+    }
+
+    public State state;
     private int mapWidth;
 
     private int mapHeight;
@@ -169,6 +177,7 @@ public class GameManager : MonoBehaviour {
         hightile = new List<GameObject>();
         currentWave = waves.NextWave();
         WaveText.text = "Wave " + currentWave.number;
+        state = State.Idle;
     }
 
     private List<GameObject> hightile;
@@ -289,7 +298,7 @@ public class GameManager : MonoBehaviour {
                 }
             }
             else {
-                EnemyTurn();
+                
             }
         }
     }
@@ -500,19 +509,24 @@ public class GameManager : MonoBehaviour {
             WaveText.text = "Wave " + currentWave.number;
             
         }
-        
-        
+
+        StartCoroutine(EnemyTurn());
     }
     
-    void EnemyTurn() {
+    IEnumerator EnemyTurn() {
         for (int i = enemies.Count-1 ; i >=0; --i) {
             enemies[i].ResetAfterTurn();
+            state = State.Moving;
             enemies[i].Move();
+            yield return new WaitUntil(() => state == State.Idle);
+            print("turn "+state);
         }
         
-        for (int i = enemies.Count-1; i >= 0; --i) {
-            StartCoroutine(enemies[i].Attack());
-        }
+        // for (int i = enemies.Count-1; i >= 0; --i) {
+        //     //state = State.Attacking;
+        //     StartCoroutine(enemies[i].Attack());
+        //     yield return new WaitUntil(() => state == State.Idle);
+        // }
         
         if (!endOfWave) {
             SpawnWave();
