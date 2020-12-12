@@ -151,9 +151,6 @@ public abstract class BasicCreature : MonoBehaviour
             transform.position += moveDir * moveSpeed * Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
-        print("before "+manager.state);
-        manager.state = GameManager.State.Idle;
-        print("after "+manager.state);
     }
     
     void Awake()

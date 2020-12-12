@@ -25,13 +25,7 @@ public class MapTile {
 }
 
 public class GameManager : MonoBehaviour {
-    public enum State {
-        Idle,
-        Moving,
-        Attacking
-    }
-
-    public State state;
+    
     private int mapWidth;
 
     private int mapHeight;
@@ -177,7 +171,6 @@ public class GameManager : MonoBehaviour {
         hightile = new List<GameObject>();
         currentWave = waves.NextWave();
         WaveText.text = "Wave " + currentWave.number;
-        state = State.Idle;
     }
 
     private List<GameObject> hightile;
@@ -489,7 +482,11 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public void EndTurn() {
+    public void EndTurnWrapper() {
+        StartCoroutine(EndTurn());
+    }
+    
+    private IEnumerator EndTurn() {
         isPlayersTurn = !isPlayersTurn;
         endTurnButton.SetActive(false);
         playerGold += Properties.turnGoldIncrement;
@@ -497,7 +494,7 @@ public class GameManager : MonoBehaviour {
         
         foreach (var unit in units) {
             unit.ResetAfterTurn();
-            StartCoroutine(unit.Attack());
+            yield return StartCoroutine(unit.Attack());
         }
         
         if (betweenPhase) {
@@ -510,23 +507,18 @@ public class GameManager : MonoBehaviour {
             
         }
 
-        StartCoroutine(EnemyTurn());
+        yield return StartCoroutine(EnemyTurn());
     }
     
     IEnumerator EnemyTurn() {
         for (int i = enemies.Count-1 ; i >=0; --i) {
             enemies[i].ResetAfterTurn();
-            state = State.Moving;
-            enemies[i].Move();
-            yield return new WaitUntil(() => state == State.Idle);
-            print("turn "+state);
+            yield return StartCoroutine(enemies[i].Move());
         }
         
-        // for (int i = enemies.Count-1; i >= 0; --i) {
-        //     //state = State.Attacking;
-        //     StartCoroutine(enemies[i].Attack());
-        //     yield return new WaitUntil(() => state == State.Idle);
-        // }
+        for (int i = enemies.Count-1; i >= 0; --i) {
+            yield return StartCoroutine(enemies[i].Attack());
+        }
         
         if (!endOfWave) {
             SpawnWave();

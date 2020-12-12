@@ -89,13 +89,13 @@ public abstract class BasicEnemy: BasicCreature {
         Destroy(this.gameObject);
     }
     
-    public void Move() {
+    public IEnumerator Move() {
         int stamina = this.Stamina;
         while (true) {
             if (manager.goals.Contains(this.position)) {
                 //enemy reached goal
                 manager.SubstractLife(this);
-                return;
+                yield break;
             }
             
             Vector2Int nextPosition = this.Path[0];
@@ -124,7 +124,7 @@ public abstract class BasicEnemy: BasicCreature {
                 
                 //move to the next position
                 this.position = nextPosition;
-                
+                yield return StartCoroutine(Movement(manager.TileCoordinatesToReal(this.position)));
                 // movePosition.SetMovePosition(manager.TileCoordinatesToReal(this.position));
                 //this.gameObject.transform.position = manager.TileCoordinatesToReal(this.position);
                 
@@ -141,7 +141,7 @@ public abstract class BasicEnemy: BasicCreature {
                 break;
             }
         }
-        StartCoroutine(Movement(manager.TileCoordinatesToReal(this.position)));
+       
         // //todo not sure if it should be here or after all enemies finished moving
         // this.Attack();
     }
