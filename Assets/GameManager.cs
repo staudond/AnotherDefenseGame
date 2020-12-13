@@ -8,9 +8,10 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
-
-public enum Units{None = 0,SwordsMan = 1}
-public enum Enemies{None = 0, Goblin = 1,Orc = 2}
+using Creatures.Units;
+using Creatures.Enemies;
+public enum Units{None = 0,SpearMan = 1,SwordsMan = 2,Archer = 3, AxeMan = 4, CrossbowMan = 5, Berserker = 6}
+public enum Enemies{None = 0, Goblin = 1,Orc = 2, Spider = 3, Wolf = 4}
 
 
 
@@ -25,8 +26,10 @@ public class MapTile {
 }
 
 public class GameManager : MonoBehaviour {
+    
     //if true, animations will be skipped that turn
     public static bool skip;
+    
     private int mapWidth;
 
     private int mapHeight;
@@ -40,6 +43,7 @@ public class GameManager : MonoBehaviour {
 
     private List<Vector2Int> spawns;
     public List<Vector2Int> goals { get; private set; }
+    
     private Dictionary<Vector2Int, List<Vector2Int>> pathsFromSpawn;
     
     private MapTile[,] map;
@@ -95,6 +99,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private int playerLives = Properties.playerStartLives;
     
     [SerializeField] private int playerGold = Properties.playerStartGold;
+    
     private GameObject pauseScreen;
     private GameObject gameOverScreen;
     private GameObject winningScreen;
@@ -137,7 +142,7 @@ public class GameManager : MonoBehaviour {
         
         
         LivesText = GameObject.Find("Lives").GetComponent<Text>();
-        GoldText = GameObject.Find("Gold").GetComponent<Text>();
+        GoldText = GameObject.Find("PlayerGold").GetComponent<Text>();
         WaveText = GameObject.Find("Wave").GetComponent<Text>();
         PhaseText = GameObject.Find("Phase");
         PhaseText.SetActive(false);
@@ -587,6 +592,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    //calculates positions unit can move to based on its range
     public static List<Vector2Int> RangeToRangeVectors(int range) {
         List<Vector2Int> vectors = new List<Vector2Int>();
         for (int i = -range; i <= range; i++) {
@@ -600,6 +606,7 @@ public class GameManager : MonoBehaviour {
         return vectors;
     }
 
+    //calculates tile positions from range vectors
     public static List<Vector2Int> RangeVectorsToPositions(Vector2Int pos, List<Vector2Int> vectors) {
         List<Vector2Int> positions = new List<Vector2Int>();
         foreach (Vector2Int vector in vectors) {
@@ -609,30 +616,33 @@ public class GameManager : MonoBehaviour {
         return positions;
     }
 
+    //calculates positions creature can attack from its range
+    //range value is 10 times its range, cause floats
+    //range is rhombus shaped
+    //attack range 1: 1 up, 1 down, 1 left, 1 right
+    //attack range 2: 2 up, 2 down, 2 left, 2 right, 1 diagonally
     public static List<Vector2Int> AttackRangeToRangeVectors(int range) {
        
         List<Vector2Int> vectors = new List<Vector2Int>();
+        bool shorter = false;
         
         if (range % 10 == 5) {
+            shorter = true;
             range /= 10;
             range++;
-            
-            for (int y = -range; y <= range; y++) {
-                for (int x = -(range - Mathf.Abs(y)); x <= range - Mathf.Abs(y); x++) {
-                    if ((x == 0 && y == 0) || (Mathf.Abs(x) == range || Mathf.Abs(y) == range)) {
-                        continue;
-                    }
-
-                    vectors.Add(new Vector2Int(x, y));
-                }
-            }
-            
-            return vectors;
         }
-
-        range /= 10;
+        else {
+            range /= 10;
+        }
+        
         for (int y = -range; y <= range; y++) {
             for (int x = -(range - Mathf.Abs(y)); x <= range - Mathf.Abs(y); x++) {
+                //if the range ended with 5, the 4 furthest positions are skipped
+                if (shorter && (Mathf.Abs(x) == range || Mathf.Abs(y) == range)) {
+                    continue;
+                }
+                
+                //the position of creature itself is skipped, creature cannot attack itself
                 if (x == 0 && y == 0) {
                     continue;
                 }
@@ -640,7 +650,6 @@ public class GameManager : MonoBehaviour {
                 vectors.Add(new Vector2Int(x, y));
             }
         }
-
         return vectors;
     }
 
@@ -656,9 +665,24 @@ public class GameManager : MonoBehaviour {
     private void AddAllUnits() {
         allUnits = new List<GameObject>();
         unitValues = new List<int>();
-        //allUnits.Add(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Creatures/Units/SwordsManPrefab.prefab"));
+
+        allUnits.Add(Resources.Load<GameObject>("Prefabs/Creatures/Units/SpearManPrefab"));
+        unitValues.Add(UnitProperties.SpearManGoldValue);
+        
         allUnits.Add(Resources.Load<GameObject>("Prefabs/Creatures/Units/SwordsManPrefab"));
-        unitValues.Add(UnitProperties.SwordsmanGoldValue);
+        unitValues.Add(UnitProperties.SwordsManGoldValue);
+        
+        allUnits.Add(Resources.Load<GameObject>("Prefabs/Creatures/Units/ArcherPrefab"));
+        unitValues.Add(UnitProperties.ArcherGoldValue);
+        
+        allUnits.Add(Resources.Load<GameObject>("Prefabs/Creatures/Units/AxeManPrefab"));
+        unitValues.Add(UnitProperties.AxeManGoldValue);
+        
+        allUnits.Add(Resources.Load<GameObject>("Prefabs/Creatures/Units/CrossbowManPrefab"));
+        unitValues.Add(UnitProperties.CrossbowManGoldValue);
+        
+        allUnits.Add(Resources.Load<GameObject>("Prefabs/Creatures/Units/BerserkerPrefab"));
+        unitValues.Add(UnitProperties.BerserkerGoldValue);
     }
 
     private void AddAllEnemies() {
@@ -671,12 +695,9 @@ public class GameManager : MonoBehaviour {
     }
 
     public void SelectUnitToSpawn(String unitName) {
-        
         if (Enum.TryParse(unitName, true, out selectedSpawnUnit)) {
 
         }
-
-
     }
     
     

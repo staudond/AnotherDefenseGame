@@ -7,6 +7,7 @@
       <e p="Another_Defense_Game.sln" t="IncludeFlat" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
+        <e p="ButtonGoldValueChanger.cs" t="Include" />
         <e p="CameraMovementOperator.cs" t="Include" />
         <e p="Creatures" t="Include">
           <e p="Basic.cs" t="Include" />
@@ -14,11 +15,18 @@
             <e p="BasicEnemy.cs" t="Include" />
             <e p="Goblin.cs" t="Include" />
             <e p="Orc.cs" t="Include" />
+            <e p="Spider.cs" t="Include" />
+            <e p="Wolf.cs" t="Include" />
           </e>
           <e p="HealthBar.cs" t="Include" />
           <e p="MovePosition.cs" t="Include" />
           <e p="Units" t="Include">
+            <e p="Archer.cs" t="Include" />
+            <e p="AxeMan.cs" t="Include" />
             <e p="BasicUnit.cs" t="Include" />
+            <e p="Berserker.cs" t="Include" />
+            <e p="CrossbowMan.cs" t="Include" />
+            <e p="SpearMan.cs" t="Include" />
             <e p="SwordsMan.cs" t="Include" />
           </e>
         </e>
