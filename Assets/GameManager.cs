@@ -25,7 +25,8 @@ public class MapTile {
 }
 
 public class GameManager : MonoBehaviour {
-    
+    //if true, animations will be skipped that turn
+    public static bool skip;
     private int mapWidth;
 
     private int mapHeight;
@@ -70,6 +71,7 @@ public class GameManager : MonoBehaviour {
     private bool won = false;
 
     private GameObject endTurnButton;
+    private GameObject skipButton; 
 
     private BasicUnit selectedUnit = null;
     private Units selectedSpawnUnit;
@@ -127,6 +129,8 @@ public class GameManager : MonoBehaviour {
         goalPositions = GameObject.Find("GoalPositions").GetComponent<Tilemap>();
         background = GameObject.Find("Background").GetComponent<Tilemap>();
         endTurnButton = GameObject.FindWithTag("EndTurnButton");
+        skipButton = GameObject.FindWithTag("SkipButton");
+        skipButton.SetActive(false);
         highlightingTile = Resources.Load<GameObject>("Prefabs/HighlightTiles/HighlightTile");
         enemyHighlightingTile = Resources.Load<GameObject>("Prefabs/HighlightTiles/EnemyHighlightTile");
         unitHighlightingTile = Resources.Load<GameObject>("Prefabs/HighlightTiles/UnitHighlightTile");
@@ -171,6 +175,7 @@ public class GameManager : MonoBehaviour {
         hightile = new List<GameObject>();
         currentWave = waves.NextWave();
         WaveText.text = "Wave " + currentWave.number;
+        skip = false;
     }
 
     private List<GameObject> hightile;
@@ -483,7 +488,16 @@ public class GameManager : MonoBehaviour {
     }
 
     public void EndTurnWrapper() {
+        //set skip to false so animations play normally
+        skip = false;
+        //show skip button
+        skipButton.SetActive(true);
         StartCoroutine(EndTurn());
+    }
+
+    public void SkipTurn() {
+        skip = true;
+        skipButton.SetActive(false);
     }
     
     private IEnumerator EndTurn() {
@@ -531,7 +545,9 @@ public class GameManager : MonoBehaviour {
             currentDelayBetweenPartsOfWaves = 0;
         }
         isPlayersTurn = true;
+        skipButton.SetActive(false);
         endTurnButton.SetActive(true);
+        
         
        
     }

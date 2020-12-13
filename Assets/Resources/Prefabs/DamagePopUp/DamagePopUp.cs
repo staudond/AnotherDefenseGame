@@ -33,6 +33,10 @@ public class DamagePopUp : MonoBehaviour {
     }
     
     private void Update() {
+        if (GameManager.skip) {
+            Destroy(gameObject);
+            return;
+        }
         transform.position += moveVector * Time.deltaTime;
         moveVector -= moveVector * (8f * Time.deltaTime);
         if (disappearTimer >= DISAPPEAR_TIMER_MAX * .5f) {

@@ -77,7 +77,13 @@ public abstract class BasicUnit : BasicCreature
                 if (!manager.betweenPhase) {
                     //game is not in phase between waves
                     //movePosition.SetMovePosition(realTargetPosition);
-                    StartCoroutine(Movement(realTargetPosition));
+                    if (GameManager.skip) {
+                        this.gameObject.transform.position = realTargetPosition;
+                    }
+                    else {
+                        StartCoroutine(Movement(realTargetPosition));
+                    }
+
                     //this.gameObject.transform.position = realTargetPosition;
                     this.CanMove = false;
                 }

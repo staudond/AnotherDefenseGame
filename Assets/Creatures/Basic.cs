@@ -76,7 +76,10 @@ public abstract class BasicCreature : MonoBehaviour
             for (int i = 0; i < attackSpeed; i++) {
                 if (IndividualAttack()) {
                     remainingAttackCooldown = attackCooldown;
-                    yield return new WaitForSeconds(Properties.nextAttackDelay);
+                    if (!GameManager.skip) {
+                        yield return new WaitForSeconds(Properties.nextAttackDelay);
+                    }
+
                     foreach (var tile in highlightTiles) {
                         Destroy(tile);
                     }
@@ -143,7 +146,7 @@ public abstract class BasicCreature : MonoBehaviour
         while (true) {
             Vector3 moveDir = (movePosition - transform.position).normalized;
             if (Vector3.Distance(movePosition, transform.position) < 0.1f) {
-                //moveDir = Vector3.zero; // Stop moving when near
+                // Stop moving when near target position
                 transform.position = movePosition;
                 break;
             }

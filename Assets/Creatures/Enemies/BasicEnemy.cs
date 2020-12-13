@@ -124,7 +124,12 @@ public abstract class BasicEnemy: BasicCreature {
                 
                 //move to the next position
                 this.position = nextPosition;
-                yield return StartCoroutine(Movement(manager.TileCoordinatesToReal(this.position)));
+                if (GameManager.skip) {
+                    this.gameObject.transform.position = manager.TileCoordinatesToReal(this.position);
+                }
+                else {
+                    yield return StartCoroutine(Movement(manager.TileCoordinatesToReal(this.position)));
+                }
                 // movePosition.SetMovePosition(manager.TileCoordinatesToReal(this.position));
                 //this.gameObject.transform.position = manager.TileCoordinatesToReal(this.position);
                 
