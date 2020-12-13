@@ -10,7 +10,8 @@ using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 using Creatures.Units;
 using Creatures.Enemies;
-public enum Units{None = 0,SpearMan = 1,SwordsMan = 2,Archer = 3, AxeMan = 4, CrossbowMan = 5, Berserker = 6}
+public enum Units{None = 0,SpearMan = 1,SwordsMan = 2,Archer = 3, AxeMan = 4, 
+    CrossbowMan = 5, Berserker = 6, ShieldMan = 7,Mage = 8}
 public enum Enemies{None = 0, Goblin = 1,Orc = 2, Spider = 3, Wolf = 4}
 
 
@@ -683,6 +684,12 @@ public class GameManager : MonoBehaviour {
         
         allUnits.Add(Resources.Load<GameObject>("Prefabs/Creatures/Units/BerserkerPrefab"));
         unitValues.Add(UnitProperties.BerserkerGoldValue);
+        
+        allUnits.Add(Resources.Load<GameObject>("Prefabs/Creatures/Units/ShieldManPrefab"));
+        unitValues.Add(UnitProperties.ShieldManGoldValue);
+        
+        allUnits.Add(Resources.Load<GameObject>("Prefabs/Creatures/Units/MagePrefab"));
+        unitValues.Add(UnitProperties.MageGoldValue);
     }
 
     private void AddAllEnemies() {

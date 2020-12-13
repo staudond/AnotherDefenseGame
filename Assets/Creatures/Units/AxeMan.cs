@@ -18,6 +18,9 @@ namespace Creatures.Units {
             canMove = true;
         }
 
-
+        protected override bool IndividualAttack() {
+            //todo units next to him in one direction
+            return base.IndividualAttack();
+        }
     }
 }

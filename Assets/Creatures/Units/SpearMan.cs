@@ -18,6 +18,9 @@ namespace Creatures.Units {
             canMove = true;
         }
 
-
+        protected override bool IndividualAttack() {
+            //todo enemies in row
+            return base.IndividualAttack();
+        }
     }
 }

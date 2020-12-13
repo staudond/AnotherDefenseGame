@@ -47,6 +47,22 @@ public class UnitProperties {
     public const int CrossbowManAttackCooldown = 3;
     public const int CrossbowManGoldValue = 200;
     
+    //Mage properties
+    public const int MageDmg = 55;
+    public const int MageHp = 30;
+    public const int MageAttackSpeed = 1;
+    public const int MageAttackRange = 70; 
+    public const int MageAttackCooldown = 6;
+    public const int MageGoldValue = 150;
+    
+    //ShieldMan properties
+    public const int ShieldManDmg = 1;
+    public const int ShieldManHp = 200;
+    public const int ShieldManAttackSpeed = 1;
+    public const int ShieldManAttackRange = 10; 
+    public const int ShieldManAttackCooldown = 0;
+    public const int ShieldManGoldValue = 120;
+
     //SpearMan properties
     public const int SpearManDmg = 15;
     public const int SpearManHp = 75;

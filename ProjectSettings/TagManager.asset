@@ -12,6 +12,8 @@ TagManager:
   - CrossbowMan
   - Berserker
   - SwordsMan
+  - Mage
+  - ShieldMan
   layers:
   - Default
   - TransparentFX

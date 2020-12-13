@@ -15,12 +15,12 @@ public class EnemyProperties
     
     //Goblin properties
     public const int GoblinDmg = 15;
-    public const int GoblinHp = 40;
+    public const int GoblinHp = 50;
     public const int GoblinAttackSpeed = 2;
     public const int GoblinAttackRange = 15;
     public const int GoblinAttackCooldown = 0;
     public const int GoblinStamina = 30;
-    public const int GoblinGoldValue = 25;
+    public const int GoblinGoldValue = 40;
     
     
     
@@ -31,24 +31,24 @@ public class EnemyProperties
     public const int OrcAttackRange = 10;
     public const int OrcAttackCooldown = 2;
     public const int OrcStamina = 15;
-    public const int OrcGoldValue = 60;
+    public const int OrcGoldValue = 80;
     
     //Spider properties
-    public const int SpiderDmg = 60;
-    public const int SpiderHp = 100;
-    public const int SpiderAttackSpeed = 1;
-    public const int SpiderAttackRange = 10;
-    public const int SpiderAttackCooldown = 2;
-    public const int SpiderStamina = 15;
-    public const int SpiderGoldValue = 60;
+    public const int SpiderDmg = 8;
+    public const int SpiderHp = 30;
+    public const int SpiderAttackSpeed = 4;
+    public const int SpiderAttackRange = 15;
+    public const int SpiderAttackCooldown = 0;
+    public const int SpiderStamina = 45;
+    public const int SpiderGoldValue = 30;
     
     //Wolf properties
-    public const int WolfDmg = 60;
-    public const int WolfHp = 100;
-    public const int WolfAttackSpeed = 1;
-    public const int WolfAttackRange = 10;
-    public const int WolfAttackCooldown = 2;
-    public const int WolfStamina = 15;
-    public const int WolfGoldValue = 60;
+    public const int WolfDmg = 20;
+    public const int WolfHp = 60;
+    public const int WolfAttackSpeed = 2;
+    public const int WolfAttackRange = 15;
+    public const int WolfAttackCooldown = 0;
+    public const int WolfStamina = 35;
+    public const int WolfGoldValue = 50;
     
 }
