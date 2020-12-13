@@ -29,7 +29,7 @@ public class EnemyProperties
     public const int OrcHp = 100;
     public const int OrcAttackSpeed = 1;
     public const int OrcAttackRange = 10;
-    public const int OrcAttackCooldown = 2;
+    public const int OrcAttackCooldown = 1;
     public const int OrcStamina = 15;
     public const int OrcGoldValue = 80;
     

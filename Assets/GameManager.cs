@@ -89,6 +89,8 @@ public class GameManager : MonoBehaviour {
     private GameObject highlightingTile;
     public GameObject enemyHighlightingTile{ get; private set; }
     public GameObject unitHighlightingTile{ get; private set; }
+    private GameObject rangeHighlightingTile;
+    
     private List<GameObject> highlightingTiles;
 
     public List<Vector2Int> highlightedPositions { get; private set; }
@@ -140,6 +142,7 @@ public class GameManager : MonoBehaviour {
         highlightingTile = Resources.Load<GameObject>("Prefabs/HighlightTiles/HighlightTile");
         enemyHighlightingTile = Resources.Load<GameObject>("Prefabs/HighlightTiles/EnemyHighlightTile");
         unitHighlightingTile = Resources.Load<GameObject>("Prefabs/HighlightTiles/UnitHighlightTile");
+        rangeHighlightingTile = Resources.Load<GameObject>("Prefabs/HighlightTiles/RangeHighlightTile");
         
         
         LivesText = GameObject.Find("Lives").GetComponent<Text>();
@@ -186,25 +189,38 @@ public class GameManager : MonoBehaviour {
 
     private List<GameObject> hightile;
     void Update() {
-        // if (Input.GetKeyDown(KeyCode.Space)) {
-        //     foreach (var unit in units) {
-        //         var xs = RangeVectorsToPositions(unit.position,AttackRangeToRangeVectors(unit.AttackRange));
-        //         
-        //         
-        //         foreach (var x in xs) {
-        //             if (CheckBounds(x)) {
-        //                 hightile.Add(Instantiate(enemyHighlightingTile, TileCoordinatesToReal(x), Quaternion.identity));
-        //             }
-        //         }
-        //     }
-        // }
-        // if(Input.GetKeyUp(KeyCode.Space))
-        // {
-        //     foreach (var tile in hightile) {
-        //         Destroy(tile);
-        //     }
-        //     hightile.Clear();
-        // }
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            List<List<Vector2Int>> xs = new List<List<Vector2Int>>();
+
+            if (selectedUnit != null) {
+                xs.Add(RangeVectorsToPositions(selectedUnit.position,
+                    AttackRangeToRangeVectors(selectedUnit.AttackRange)));
+            }
+            else {
+                foreach (var unit in units) {
+                    xs.Add(RangeVectorsToPositions(unit.position,
+                        AttackRangeToRangeVectors(unit.AttackRange)));
+                }
+            }
+
+            foreach (var x in xs) {
+                foreach (var pos in x) {
+                    if (CheckBounds(pos) && map[pos.x,pos.y].isRoad) {
+                        hightile.Add(Instantiate(rangeHighlightingTile, TileCoordinatesToReal(pos),
+                            Quaternion.identity));
+                    }
+                }
+            }
+        }
+        
+        
+        if(Input.GetKeyUp(KeyCode.Space))
+        {
+            foreach (var tile in hightile) {
+                Destroy(tile);
+            }
+            hightile.Clear();
+        }
 
         LivesText.text = "LIVES: " + playerLives;
         GoldText.text = "GOLD: " + playerGold;

@@ -34,8 +34,8 @@ public class UnitProperties {
     //Berserker properties
     public const int BerserkerDmg = 15;
     public const int BerserkerHp = 140;
-    public const int BerserkerAttackSpeed = 2;
-    public const int BerserkerAttackRange = 10; 
+    public const int BerserkerAttackSpeed = 3;
+    public const int BerserkerAttackRange = 15; 
     public const int BerserkerAttackCooldown = 0;
     public const int BerserkerGoldValue = 175;
     
