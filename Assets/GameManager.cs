@@ -258,17 +258,19 @@ public class GameManager : MonoBehaviour {
                     RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
                     if (hit.collider != null) {
                         //clicked on object with collider(road or unit)
-                        if (hit.collider.gameObject.GetComponent(typeof(Tilemap)) == roads) {
+                        print(RealCoordinatesToNearestTile(cam.ScreenToWorldPoint(Input.mousePosition)));
+                        if (hit.collider.gameObject.GetComponent<Tilemap>() == roads) {
                             //clicked on road(empty tile)
+                            print("road");
                             if (selectedSpawnUnit != Units.None) {
                                 //there is selected unit to spawn
                                 if (unitValues[(int) selectedSpawnUnit - 1] <= playerGold) {
                                     //player have enough gold 
-                                    GameObject current = EventSystem.current.currentSelectedGameObject;
+                                    //GameObject current = EventSystem.current.currentSelectedGameObject;
 
                                     SpawnUnit(cam.ScreenToWorldPoint(Input.mousePosition));
                                     if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
-                                        EventSystem.current.SetSelectedGameObject(current);
+                                        //EventSystem.current.SetSelectedGameObject(current);
                                         
                                     }
                                     else {
@@ -285,8 +287,9 @@ public class GameManager : MonoBehaviour {
                         }
                         else {
                             //we clicked on unit
+                            print("unit");
                             StopHighlighting();
-                            BasicUnit temp = hit.collider.gameObject.GetComponent(typeof(BasicUnit)) as BasicUnit;
+                            BasicUnit temp = hit.collider.gameObject.GetComponent<BasicUnit>();
                             if (temp != null) {
                                 selectedUnit = temp;
                                 selectedSpawnUnit = Units.None;
@@ -481,16 +484,16 @@ public class GameManager : MonoBehaviour {
 
     void SpawnUnit(Vector3 position) {
         Vector2Int tilePosition = RealCoordinatesToNearestTile(position);
-        Vector3 finPosition = GetNearestPositionOnGrid(position);
+        Vector3 gridPosition = GetNearestPositionOnGrid(position);
 
-        if (!(finPosition.x < ((-mapWidth * tileSize / 2) + roads.transform.position.x) ||
-              finPosition.x > ((mapWidth * tileSize / 2) + roads.transform.position.x) ||
-              finPosition.y < ((-mapHeight * tileSize / 2) + roads.transform.position.y) ||
-              finPosition.y > ((mapHeight * tileSize / 2) + roads.transform.position.y))) {
+        if (!(gridPosition.x < ((-mapWidth * tileSize / 2) + roads.transform.position.x) ||
+              gridPosition.x > ((mapWidth * tileSize / 2) + roads.transform.position.x) ||
+              gridPosition.y < ((-mapHeight * tileSize / 2) + roads.transform.position.y) ||
+              gridPosition.y > ((mapHeight * tileSize / 2) + roads.transform.position.y))) {
             if (map[tilePosition.x, tilePosition.y].isEmpty && !map[tilePosition.x, tilePosition.y].isSpawn) {
                 if (selectedSpawnUnit != Units.None) {
                     
-                    GameObject unitObject = Instantiate(allUnits[(int) selectedSpawnUnit-1], finPosition,
+                    GameObject unitObject = Instantiate(allUnits[(int) selectedSpawnUnit-1], gridPosition,
                         Quaternion.identity);
                     BasicUnit unit = unitObject.GetComponent<BasicUnit>();
                     

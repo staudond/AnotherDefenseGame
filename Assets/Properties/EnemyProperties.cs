@@ -25,7 +25,7 @@ public class EnemyProperties
     
     
     //Orc properties
-    public const int OrcDmg = 60;
+    public const int OrcDmg = 50;
     public const int OrcHp = 100;
     public const int OrcAttackSpeed = 1;
     public const int OrcAttackRange = 10;

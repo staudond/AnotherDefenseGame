@@ -29,8 +29,7 @@ namespace Creatures.Units {
         }
 
 
-        protected override bool IndividualAttack() {
-
+        protected BasicEnemy FindAttackTarget() {
             List<Vector2Int> attackPositions =
                 GameManager.RangeVectorsToPositions(position, GameManager.AttackRangeToRangeVectors(AttackRange));
             BasicEnemy target = null;
@@ -48,6 +47,12 @@ namespace Creatures.Units {
                     }
                 }
             }
+
+            return target;
+        }
+
+        protected override bool IndividualAttack() {
+            BasicEnemy target = FindAttackTarget();
 
             return DoIndividualAttack(target);
 
