@@ -45,3 +45,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damagePopUp: {fileID: 6523742876225108321, guid: daae62d92afc7065ea6d56b10ba2c469,
     type: 3}
+  textPopUp: {fileID: 6196454904569249683, guid: 51c334d01acefe7fa82c20b4678376b0,
+    type: 3}

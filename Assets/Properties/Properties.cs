@@ -11,4 +11,5 @@ public class Properties
     public const float animMoveSpeed = 5f;
     public const float nextAttackDelay = 0.75f;
     public const float popUpDisappearTimer = 0.75f;
+    public const float textPopUpDisappearTimer = 1.25f;
 }	

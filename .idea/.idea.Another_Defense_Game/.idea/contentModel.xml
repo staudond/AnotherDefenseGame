@@ -53,6 +53,9 @@
             <e p="DamagePopUp" t="Include">
               <e p="DamagePopUp.cs" t="Include" />
             </e>
+            <e p="TextPopUP" t="Include">
+              <e p="TextPopUp.cs" t="Include" />
+            </e>
           </e>
         </e>
         <e p="SceneChanger.cs" t="Include" />

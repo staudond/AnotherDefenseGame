@@ -189,6 +189,9 @@ public class GameManager : MonoBehaviour {
 
     private List<GameObject> hightile;
     void Update() {
+        if (selectedSpawnUnit != Units.None) {
+            HighlightEmptyTiles();
+        }
         if (Input.GetKeyDown(KeyCode.Space)) {
             List<List<Vector2Int>> xs = new List<List<Vector2Int>>();
 
@@ -252,7 +255,7 @@ public class GameManager : MonoBehaviour {
 
                 if (Input.GetMouseButtonDown(0)) {
                     //left mouse click
-                    if (EventSystem.current.IsPointerOverGameObject()) {
+                    if (!EventSystem.current.IsPointerOverGameObject()) {
                         Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
                         Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
                         RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
@@ -267,14 +270,23 @@ public class GameManager : MonoBehaviour {
                                     if (unitValues[(int) selectedSpawnUnit - 1] <= playerGold) {
                                         //player have enough gold 
                                         //GameObject current = EventSystem.current.currentSelectedGameObject;
-
+                                        
                                         SpawnUnit(cam.ScreenToWorldPoint(Input.mousePosition));
                                         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
                                             //EventSystem.current.SetSelectedGameObject(current);
                                         }
                                         else {
                                             selectedSpawnUnit = Units.None;
+                                            StopHighlighting();
                                         }
+                                    }
+                                    else {
+                                        //not enough gold
+                                        Vector3 pos = cam.ScreenToWorldPoint(Input.mousePosition);
+                                        pos.z = 0;
+                                        TextPopUp.Create(pos,"Not Enough Gold",Color.red);
+                                        selectedSpawnUnit = Units.None;
+                                        StopHighlighting();
                                     }
                                 }
                                 else if (selectedUnit != null) {
@@ -320,20 +332,24 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    void HighlightEmptyTiles() {
+        for (int x = 0; x < mapWidth; x++) {
+            for (int y = 0; y < mapHeight; y++) {
+                if (map[x, y].isRoad && map[x, y].isEmpty && !map[x, y].isSpawn) {
+                    Vector3 pos = TileCoordinatesToReal(new Vector2Int(x, y));
+                    highlightingTiles.Add(Instantiate(highlightingTile, pos, Quaternion.identity));
+                    highlightedPositions.Add(new Vector2Int(x,y));
+                }
+            }
+        }
+    }
+    
     void HighlightTiles(List<Vector2Int> positions) {
         //destroy any previous highlighted tiles
         //StopHighlighting();
         if (betweenPhase) {
             //game is in phase between waves
-            for (int x = 0; x < mapWidth; x++) {
-                for (int y = 0; y < mapHeight; y++) {
-                    if (map[x, y].isRoad && map[x, y].isEmpty && !map[x, y].isSpawn) {
-                        Vector3 pos = TileCoordinatesToReal(new Vector2Int(x, y));
-                        highlightingTiles.Add(Instantiate(highlightingTile, pos, Quaternion.identity));
-                        highlightedPositions.Add(new Vector2Int(x,y));
-                    }
-                }
-            }
+            HighlightEmptyTiles();
 
             return;
         }
@@ -503,12 +519,27 @@ public class GameManager : MonoBehaviour {
                     }
                 }
             }
+            else {
+                Vector3 pos = cam.ScreenToWorldPoint(Input.mousePosition);
+                pos.z = 0;
+                if (!map[tilePosition.x, tilePosition.y].isEmpty) {
+                    TextPopUp.Create(pos,"Cannot spawn unit on occupied tile",Color.red);
+                }
+
+                if (map[tilePosition.x, tilePosition.y].isSpawn) {
+                    TextPopUp.Create(pos, "Cannot spawn unit on spawn",Color.red);
+                }
+            }
         }
     }
 
     public void EndTurnWrapper() {
         //set skip to false so animations play normally
         skip = false;
+        StopHighlighting();
+        selectedUnit = null;
+        selectedSpawnUnit = Units.None;
+        
         //show skip button
         skipButton.SetActive(true);
         StartCoroutine(EndTurn());

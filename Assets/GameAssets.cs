@@ -15,4 +15,5 @@ public class GameAssets : MonoBehaviour {
     }
 
     public Transform damagePopUp;
+    public Transform textPopUp;
 }
