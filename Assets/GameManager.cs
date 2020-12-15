@@ -205,31 +205,31 @@ public class GameManager : MonoBehaviour {
 
             foreach (var x in xs) {
                 foreach (var pos in x) {
-                    if (CheckBounds(pos) && map[pos.x,pos.y].isRoad) {
+                    if (CheckBounds(pos) && map[pos.x, pos.y].isRoad) {
                         hightile.Add(Instantiate(rangeHighlightingTile, TileCoordinatesToReal(pos),
                             Quaternion.identity));
                     }
                 }
             }
         }
-        
-        
-        if(Input.GetKeyUp(KeyCode.Space))
-        {
+
+
+        if (Input.GetKeyUp(KeyCode.Space)) {
             foreach (var tile in hightile) {
                 Destroy(tile);
             }
+
             hightile.Clear();
         }
 
         LivesText.text = "LIVES: " + playerLives;
         GoldText.text = "GOLD: " + playerGold;
-        
+
         if (currentWave == null && waves.Empty() && enemies.Count == 0) {
             isGameOver = true;
             won = true;
         }
-        
+
         if (playerLives <= 0) {
             isGameOver = true;
             gameOverScreen.SetActive(true);
@@ -243,7 +243,6 @@ public class GameManager : MonoBehaviour {
             if (isPaused) {
                 if (Input.GetKeyDown(KeyCode.P)) {
                     Unpause();
-
                 }
             }
             else if (isPlayersTurn) {
@@ -253,75 +252,70 @@ public class GameManager : MonoBehaviour {
 
                 if (Input.GetMouseButtonDown(0)) {
                     //left mouse click
-                    Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
-                    Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
-                    RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
-                    if (hit.collider != null) {
-                        //clicked on object with collider(road or unit)
-                        print(RealCoordinatesToNearestTile(cam.ScreenToWorldPoint(Input.mousePosition)));
-                        if (hit.collider.gameObject.GetComponent<Tilemap>() == roads) {
-                            //clicked on road(empty tile)
-                            print("road");
-                            if (selectedSpawnUnit != Units.None) {
-                                //there is selected unit to spawn
-                                if (unitValues[(int) selectedSpawnUnit - 1] <= playerGold) {
-                                    //player have enough gold 
-                                    //GameObject current = EventSystem.current.currentSelectedGameObject;
+                    if (EventSystem.current.IsPointerOverGameObject()) {
+                        Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+                        Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
+                        RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
+                        if (hit.collider != null) {
+                            //clicked on object with collider(road or unit)
+                            print(RealCoordinatesToNearestTile(cam.ScreenToWorldPoint(Input.mousePosition)));
+                            if (hit.collider.gameObject.GetComponent<Tilemap>() == roads) {
+                                //clicked on road(empty tile)
+                                print("road");
+                                if (selectedSpawnUnit != Units.None) {
+                                    //there is selected unit to spawn
+                                    if (unitValues[(int) selectedSpawnUnit - 1] <= playerGold) {
+                                        //player have enough gold 
+                                        //GameObject current = EventSystem.current.currentSelectedGameObject;
 
-                                    SpawnUnit(cam.ScreenToWorldPoint(Input.mousePosition));
-                                    if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
-                                        //EventSystem.current.SetSelectedGameObject(current);
-                                        
-                                    }
-                                    else {
-                                        selectedSpawnUnit = Units.None;
+                                        SpawnUnit(cam.ScreenToWorldPoint(Input.mousePosition));
+                                        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
+                                            //EventSystem.current.SetSelectedGameObject(current);
+                                        }
+                                        else {
+                                            selectedSpawnUnit = Units.None;
+                                        }
                                     }
                                 }
+                                else if (selectedUnit != null) {
+                                    //player has selected unit
+                                    selectedUnit.Move(cam.ScreenToWorldPoint(Input.mousePosition));
+                                    selectedUnit = null;
+                                    StopHighlighting();
+                                }
                             }
-                            else if (selectedUnit != null) {
-                                //player has selected unit
-                                selectedUnit.Move(cam.ScreenToWorldPoint(Input.mousePosition));
-                                selectedUnit = null;
+                            else {
+                                //we clicked on unit
+                                print("unit");
                                 StopHighlighting();
+                                BasicUnit temp = hit.collider.gameObject.GetComponent<BasicUnit>();
+                                if (temp != null) {
+                                    selectedUnit = temp;
+                                    selectedSpawnUnit = Units.None;
+                                    highlightingTiles.Add(Instantiate(unitHighlightingTile,
+                                        selectedUnit.gameObject.transform.position, Quaternion.identity));
+                                    if (temp.CanMove) {
+                                        HighlightTiles(RangeVectorsToPositions(temp.position,
+                                            RangeToRangeVectors(UnitProperties.UnitMovementRange)));
+                                    }
+                                }
                             }
                         }
                         else {
-                            //we clicked on unit
-                            print("unit");
+                            //clicked elsewhere on the screen
                             StopHighlighting();
-                            BasicUnit temp = hit.collider.gameObject.GetComponent<BasicUnit>();
-                            if (temp != null) {
-                                selectedUnit = temp;
-                                selectedSpawnUnit = Units.None;
-                                highlightingTiles.Add(Instantiate(unitHighlightingTile,selectedUnit.gameObject.transform.position,Quaternion.identity));
-                                if (temp.CanMove) {
-                                    HighlightTiles(RangeVectorsToPositions(temp.position,
-                                        RangeToRangeVectors(UnitProperties.UnitMovementRange)));
-                                    
-                                }
-
-                            }
+                            selectedUnit = null;
+                            selectedSpawnUnit = Units.None;
                         }
                     }
-                    else {
-                        //clicked elsewhere on the screen
-                        StopHighlighting();
+
+                    if (Input.GetKeyDown(KeyCode.Escape)) {
                         selectedUnit = null;
                         selectedSpawnUnit = Units.None;
+                        EventSystem.current.SetSelectedGameObject(null);
+                        StopHighlighting();
                     }
-
-                   
                 }
-
-                if (Input.GetKeyDown(KeyCode.Escape)) {
-                    selectedUnit = null;
-                    selectedSpawnUnit = Units.None;
-                    EventSystem.current.SetSelectedGameObject(null);
-                    StopHighlighting();
-                }
-            }
-            else {
-                
             }
         }
     }

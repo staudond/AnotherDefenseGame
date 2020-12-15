@@ -301,7 +301,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 494373013}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -5.75, y: 7.45, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -335,7 +335,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 564064048}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.96, y: 0.14, z: -0.4609375}
+  m_LocalPosition: {x: -3.43, y: 6.78, z: -0.4609375}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -7159,7 +7159,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2115643527}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.020945996, y: -0.74472857, z: -11.221769}
+  m_LocalPosition: {x: -8.35, y: 7.2, z: -11.221769}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -7580,6 +7580,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 564064050}
+    - target: {fileID: 4367781905747597922, guid: b8151aec24f52ff72814fb0c97a6b1d4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4367781905747598236, guid: b8151aec24f52ff72814fb0c97a6b1d4,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -7955,12 +7960,12 @@ PrefabInstance:
     - target: {fileID: 6815592655047335451, guid: 934501b482424e94e891c4eae0aaa035,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.96
+      value: -3.43
       objectReference: {fileID: 0}
     - target: {fileID: 6815592655047335451, guid: 934501b482424e94e891c4eae0aaa035,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.14
+      value: 6.78
       objectReference: {fileID: 0}
     - target: {fileID: 6815592655047335451, guid: 934501b482424e94e891c4eae0aaa035,
         type: 3}
