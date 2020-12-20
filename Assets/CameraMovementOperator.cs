@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -13,6 +14,7 @@ public class CameraMovementOperator : MonoBehaviour {
     private Vector3 cameraMaxPosition;
     private Vector3 cameraMinPosition;
     private Tilemap background;
+    private float camAspect;
 
 
     // Start is called before the first frame update
@@ -22,7 +24,7 @@ public class CameraMovementOperator : MonoBehaviour {
         cam = Camera.main;
         Bounds camBounds = background.localBounds;
         Vector3 parentOffset = background.gameObject.GetComponentInParent<Transform>().position; //tilemap has only localBounds so we need to take into consoderation position of parent
-        
+        camAspect = cam.aspect;
         cameraMaxPosition = camBounds.max+parentOffset;
 
         cameraMinPosition = camBounds.min+parentOffset;
@@ -37,9 +39,20 @@ public class CameraMovementOperator : MonoBehaviour {
         
     }
 
+    void UpdateCameraSize() {
+        Bounds camBounds = background.localBounds;
+        float maxwidth = (camBounds.size.x / 2 + cameraBorderOffset) / cam.aspect;
+        float maxheight = (camBounds.size.y / 2 + cameraBorderOffset);
+        
+        maxCameraSize = Mathf.Min(maxwidth, maxheight);
+    }
     // Update is called once per frame
     void Update()
     {
+        if (Math.Abs(cam.aspect - camAspect) > 0.001) {
+            camAspect = cam.aspect;
+            UpdateCameraSize();
+        }
         if (!GameManager.IsPaused && !GameManager.IsGameOver) {
             CameraMovement();
             CameraResize();

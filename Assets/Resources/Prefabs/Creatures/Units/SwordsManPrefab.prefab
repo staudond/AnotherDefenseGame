@@ -23,28 +23,8 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4660594004948778224, guid: 30bdf145e2aac71a48cb5f231857d19f,
         type: 3}
-      propertyPath: m_Color.g
-      value: 0.15713024
-      objectReference: {fileID: 0}
-    - target: {fileID: 4660594004948778224, guid: 30bdf145e2aac71a48cb5f231857d19f,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4660594004948778224, guid: 30bdf145e2aac71a48cb5f231857d19f,
-        type: 3}
-      propertyPath: m_SortingLayerID
-      value: -1050026903
-      objectReference: {fileID: 0}
-    - target: {fileID: 4660594004948778224, guid: 30bdf145e2aac71a48cb5f231857d19f,
-        type: 3}
       propertyPath: m_SortingLayer
-      value: -3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4660594004948778224, guid: 30bdf145e2aac71a48cb5f231857d19f,
-        type: 3}
-      propertyPath: m_SortingOrder
-      value: 0
+      value: -4
       objectReference: {fileID: 0}
     - target: {fileID: 6857240666940241978, guid: 30bdf145e2aac71a48cb5f231857d19f,
         type: 3}
@@ -110,6 +90,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SwordsMan
+      objectReference: {fileID: 0}
+    - target: {fileID: 8575452619631549367, guid: 30bdf145e2aac71a48cb5f231857d19f,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 7328903508575304975, guid: 833683d280821f24a99b3c8c512260d9,
+        type: 3}
+    - target: {fileID: 8575452619631549367, guid: 30bdf145e2aac71a48cb5f231857d19f,
+        type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8642589866874702615, guid: 30bdf145e2aac71a48cb5f231857d19f, type: 3}
