@@ -189,41 +189,6 @@ public class GameManager : MonoBehaviour {
 
     private List<GameObject> hightile;
     void Update() {
-        if (selectedSpawnUnit != Units.None) {
-            HighlightEmptyTiles();
-        }
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            List<List<Vector2Int>> xs = new List<List<Vector2Int>>();
-
-            if (selectedUnit != null) {
-                xs.Add(RangeVectorsToPositions(selectedUnit.position,
-                    AttackRangeToRangeVectors(selectedUnit.AttackRange)));
-            }
-            else {
-                foreach (var unit in units) {
-                    xs.Add(RangeVectorsToPositions(unit.position,
-                        AttackRangeToRangeVectors(unit.AttackRange)));
-                }
-            }
-
-            foreach (var x in xs) {
-                foreach (var pos in x) {
-                    if (CheckBounds(pos) && map[pos.x, pos.y].isRoad) {
-                        hightile.Add(Instantiate(rangeHighlightingTile, TileCoordinatesToReal(pos),
-                            Quaternion.identity));
-                    }
-                }
-            }
-        }
-
-
-        if (Input.GetKeyUp(KeyCode.Space)) {
-            foreach (var tile in hightile) {
-                Destroy(tile);
-            }
-
-            hightile.Clear();
-        }
 
         LivesText.text = "LIVES: " + playerLives;
         GoldText.text = "GOLD: " + playerGold;
@@ -251,6 +216,42 @@ public class GameManager : MonoBehaviour {
             else if (isPlayersTurn) {
                 if (Input.GetKeyDown(KeyCode.P)) {
                     Pause();
+                }
+                
+                if (selectedSpawnUnit != Units.None) {
+                    HighlightEmptyTiles();
+                }
+                if (Input.GetKeyDown(KeyCode.Space)) {
+                    List<List<Vector2Int>> xs = new List<List<Vector2Int>>();
+
+                    if (selectedUnit != null) {
+                        xs.Add(RangeVectorsToPositions(selectedUnit.position,
+                            AttackRangeToRangeVectors(selectedUnit.AttackRange)));
+                    }
+                    else {
+                        foreach (var unit in units) {
+                            xs.Add(RangeVectorsToPositions(unit.position,
+                                AttackRangeToRangeVectors(unit.AttackRange)));
+                        }
+                    }
+
+                    foreach (var x in xs) {
+                        foreach (var pos in x) {
+                            if (CheckBounds(pos) && map[pos.x, pos.y].isRoad) {
+                                hightile.Add(Instantiate(rangeHighlightingTile, TileCoordinatesToReal(pos),
+                                    Quaternion.identity));
+                            }
+                        }
+                    }
+                }
+
+
+                if (Input.GetKeyUp(KeyCode.Space)) {
+                    foreach (var tile in hightile) {
+                        Destroy(tile);
+                    }
+
+                    hightile.Clear();
                 }
 
                 if (Input.GetMouseButtonDown(0)) {
@@ -328,6 +329,9 @@ public class GameManager : MonoBehaviour {
                         StopHighlighting();
                     }
                 }
+            }
+            else {
+                EventSystem.current.SetSelectedGameObject(null);
             }
         }
     }
@@ -551,7 +555,7 @@ public class GameManager : MonoBehaviour {
     }
     
     private IEnumerator EndTurn() {
-        isPlayersTurn = !isPlayersTurn;
+        isPlayersTurn = false;
         endTurnButton.SetActive(false);
         playerGold += Properties.turnGoldIncrement;
         
@@ -746,8 +750,8 @@ public class GameManager : MonoBehaviour {
     }
 
     public void SelectUnitToSpawn(String unitName) {
-        if (Enum.TryParse(unitName, true, out selectedSpawnUnit)) {
-
+        if (isPlayersTurn) {
+            if (Enum.TryParse(unitName, true, out selectedSpawnUnit)) { }
         }
     }
     
