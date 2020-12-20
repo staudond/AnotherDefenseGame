@@ -34,6 +34,7 @@
         <e p="ExitGame.cs" t="Include" />
         <e p="GameAssets.cs" t="Include" />
         <e p="GameManager.cs" t="Include" />
+        <e p="LastActiveButton.cs" t="Include" />
         <e p="MapWaves" t="Include">
           <e p="EnemyWave.cs" t="Include" />
           <e p="MapWaves.cs" t="Include" />

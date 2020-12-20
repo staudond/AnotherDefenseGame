@@ -273,7 +273,7 @@ public class GameManager : MonoBehaviour {
                                         
                                         SpawnUnit(cam.ScreenToWorldPoint(Input.mousePosition));
                                         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
-                                            //EventSystem.current.SetSelectedGameObject(current);
+                                            EventSystem.current.SetSelectedGameObject(LastActiveButton.lastActiveButton);
                                         }
                                         else {
                                             selectedSpawnUnit = Units.None;
