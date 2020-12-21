@@ -190,8 +190,8 @@ public class GameManager : MonoBehaviour {
     private List<GameObject> hightile;
     void Update() {
 
-        LivesText.text = "LIVES: " + playerLives;
-        GoldText.text = "GOLD: " + playerGold;
+        LivesText.text =  playerLives.ToString();
+        GoldText.text =  playerGold.ToString();
 
         if (currentWave == null && waves.Empty() && enemies.Count == 0) {
             isGameOver = true;
@@ -252,6 +252,13 @@ public class GameManager : MonoBehaviour {
                     }
 
                     hightile.Clear();
+                }
+                
+                if (Input.GetKeyDown(KeyCode.Escape)) {
+                    selectedUnit = null;
+                    selectedSpawnUnit = Units.None;
+                    EventSystem.current.SetSelectedGameObject(null);
+                    StopHighlighting();
                 }
 
                 if (Input.GetMouseButtonDown(0)) {
@@ -321,13 +328,7 @@ public class GameManager : MonoBehaviour {
                             selectedSpawnUnit = Units.None;
                         }
                     }
-
-                    if (Input.GetKeyDown(KeyCode.Escape)) {
-                        selectedUnit = null;
-                        selectedSpawnUnit = Units.None;
-                        EventSystem.current.SetSelectedGameObject(null);
-                        StopHighlighting();
-                    }
+                    
                 }
             }
             else {
