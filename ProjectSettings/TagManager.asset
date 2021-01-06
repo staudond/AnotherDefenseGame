@@ -14,6 +14,8 @@ TagManager:
   - SwordsMan
   - Mage
   - ShieldMan
+  - Unit
+  - Enemy
   layers:
   - Default
   - TransparentFX

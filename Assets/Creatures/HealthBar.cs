@@ -30,10 +30,5 @@ public class HealthBar : MonoBehaviour {
         
         bar.localScale= new Vector3(percentage, 1);
     }
-
-
- 
-    void Update() {
-       
-    }
+    
 }

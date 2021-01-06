@@ -264,13 +264,43 @@ public class GameManager : MonoBehaviour {
                     if (!EventSystem.current.IsPointerOverGameObject()) {
                         Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
                         Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
-                        RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
-                        if (hit.collider != null) {
+                        RaycastHit2D[] hits = Physics2D.RaycastAll(mousePos2D, Vector2.zero);
+                        bool unit = false;
+                        BasicUnit temp = null;
+                        bool road = false;
+                        if (hits.Length > 0) {
+                            foreach (var hit in hits) {
+                                if (hit.collider.gameObject.CompareTag("Unit")) {
+                                    unit = true;
+                                    temp = hit.collider.gameObject.GetComponent<BasicUnit>();
+                                    break;
+                                }
+
+                                if (hit.collider.gameObject.GetComponent<Tilemap>() == roads) {
+                                    road = true;
+                                }
+                                
+                                
+                            }
                             //clicked on object with collider(road or unit)
-                            print(RealCoordinatesToNearestTile(cam.ScreenToWorldPoint(Input.mousePosition)));
-                            if (hit.collider.gameObject.GetComponent<Tilemap>() == roads) {
+                           // print(RealCoordinatesToNearestTile(cam.ScreenToWorldPoint(Input.mousePosition)));
+                            if(unit) {
+                                //we clicked on unit
+                                StopHighlighting();
+                                 
+                                if (temp != null) {
+                                    selectedUnit = temp;
+                                    selectedSpawnUnit = Units.None;
+                                    highlightingTiles.Add(Instantiate(unitHighlightingTile,
+                                        selectedUnit.gameObject.transform.position, Quaternion.identity));
+                                    if (temp.CanMove) {
+                                        HighlightTiles(RangeVectorsToPositions(temp.position,
+                                            RangeToRangeVectors(UnitProperties.UnitMovementRange)));
+                                    }
+                                }
+                            }
+                            else if (road) {
                                 //clicked on road(empty tile)
-                                print("road");
                                 if (selectedSpawnUnit != Units.None) {
                                     //there is selected unit to spawn
                                     if (unitValues[(int) selectedSpawnUnit - 1] <= playerGold) {
@@ -302,22 +332,6 @@ public class GameManager : MonoBehaviour {
                                     StopHighlighting();
                                 }
                             }
-                            else {
-                                //we clicked on unit
-                                print("unit");
-                                StopHighlighting();
-                                BasicUnit temp = hit.collider.gameObject.GetComponent<BasicUnit>();
-                                if (temp != null) {
-                                    selectedUnit = temp;
-                                    selectedSpawnUnit = Units.None;
-                                    highlightingTiles.Add(Instantiate(unitHighlightingTile,
-                                        selectedUnit.gameObject.transform.position, Quaternion.identity));
-                                    if (temp.CanMove) {
-                                        HighlightTiles(RangeVectorsToPositions(temp.position,
-                                            RangeToRangeVectors(UnitProperties.UnitMovementRange)));
-                                    }
-                                }
-                            }
                         }
                         else {
                             //clicked elsewhere on the screen
@@ -344,6 +358,22 @@ public class GameManager : MonoBehaviour {
                     highlightedPositions.Add(new Vector2Int(x,y));
                 }
             }
+        }
+    }
+
+    //for testing purposes
+    public void SpawnAtZero(int i) {
+        var spawn = RealCoordinatesToNearestTile(new Vector3(0, 0, 0));
+        GameObject enemyObject = Instantiate(allEnemies[i], TileCoordinatesToReal(spawn), Quaternion.identity);
+         
+        BasicEnemy enemy = enemyObject.GetComponent<BasicEnemy>();
+
+        if (enemy != null) {
+            map[spawn.x, spawn.y].isEmpty = false;
+            map[spawn.x, spawn.y].hasEnemy = true;
+            map[spawn.x, spawn.y].enemy = enemy;
+            enemy.SetUp(map, spawn,new List<Vector2Int>(),this);
+            enemies.Add(enemy);
         }
     }
     
@@ -548,7 +578,7 @@ public class GameManager : MonoBehaviour {
         StartCoroutine(EndTurn());
     }
 
-    public void SkipTurn() {
+    public void SkipTurnAnimation() {
         skip = true;
         skipButton.SetActive(false);
     }
@@ -746,15 +776,18 @@ public class GameManager : MonoBehaviour {
         // allEnemies.Add(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Creatures/Enemies/OrcPrefab.prefab"));
         allEnemies.Add(Resources.Load<GameObject>("Prefabs/Creatures/Enemies/GoblinPrefab"));
         allEnemies.Add(Resources.Load<GameObject>("Prefabs/Creatures/Enemies/OrcPrefab"));
+        allEnemies.Add(Resources.Load<GameObject>("Prefabs/Creatures/Enemies/SpiderPrefab"));
+        allEnemies.Add(Resources.Load<GameObject>("Prefabs/Creatures/Enemies/WolfPrefab"));
     }
 
     public void SelectUnitToSpawn(String unitName) {
+        
         if (isPlayersTurn) {
             if (Enum.TryParse(unitName, true, out selectedSpawnUnit)) { }
         }
     }
     
-    
+    //for testing purposes
     public void TestSpawnEnemy(int i) {
         if (!(i >= 0 && i < allEnemies.Count)) {
             return;
