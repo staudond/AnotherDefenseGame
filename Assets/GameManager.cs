@@ -54,8 +54,6 @@ public class GameManager : MonoBehaviour {
     private List<BasicEnemy> enemies;
     private List<BasicUnit> units;
 
-    public GameObject obj;
-
     private Camera cam;
 
     private float tileOffset;
