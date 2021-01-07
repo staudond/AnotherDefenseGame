@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2430591957965366690}
   - component: {fileID: 2430591957965366691}
   - component: {fileID: 2430591957965366692}
+  - component: {fileID: 512454988497363187}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -45,7 +46,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58d900a7b31baef54a5dcca8ba3b5c27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obj: {fileID: 0}
   playerLives: 20
   playerGold: 400
 --- !u!114 &2430591957965366691
@@ -70,5 +70,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93d1cf866ed808f4abea6cb560ef02a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &512454988497363187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2430591957965366688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b01361eade80c3379f9428c0ba3ef35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

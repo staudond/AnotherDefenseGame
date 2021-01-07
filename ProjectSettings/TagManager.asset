@@ -59,6 +59,9 @@ TagManager:
   - name: Utilities
     uniqueID: 867537795
     locked: 0
+  - name: Props
+    uniqueID: 1446012821
+    locked: 0
   - name: HighlightTiles
     uniqueID: 2873552363
     locked: 0

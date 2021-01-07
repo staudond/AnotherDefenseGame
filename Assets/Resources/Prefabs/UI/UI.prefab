@@ -1559,10 +1559,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: SelectAxeMan
       objectReference: {fileID: 0}
-    - target: {fileID: 6407551613838538396, guid: e185c4535b0668fb7bc85e8f21579536,
+    - target: {fileID: 5975149327270751015, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
       propertyPath: m_TagString
       value: AxeMan
+      objectReference: {fileID: 0}
+    - target: {fileID: 6407551613838538396, guid: e185c4535b0668fb7bc85e8f21579536,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 8507317097464175175, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
@@ -1714,10 +1719,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: SelectCrossbowMan
       objectReference: {fileID: 0}
-    - target: {fileID: 6407551613838538396, guid: e185c4535b0668fb7bc85e8f21579536,
+    - target: {fileID: 5975149327270751015, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
       propertyPath: m_TagString
       value: CrossbowMan
+      objectReference: {fileID: 0}
+    - target: {fileID: 6407551613838538396, guid: e185c4535b0668fb7bc85e8f21579536,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 8507317097464175175, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
@@ -1869,10 +1879,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: SelectArcher
       objectReference: {fileID: 0}
-    - target: {fileID: 6407551613838538396, guid: e185c4535b0668fb7bc85e8f21579536,
+    - target: {fileID: 5975149327270751015, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
       propertyPath: m_TagString
       value: Archer
+      objectReference: {fileID: 0}
+    - target: {fileID: 6407551613838538396, guid: e185c4535b0668fb7bc85e8f21579536,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 8507317097464175175, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
@@ -2024,10 +2039,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: SelectMage
       objectReference: {fileID: 0}
-    - target: {fileID: 6407551613838538396, guid: e185c4535b0668fb7bc85e8f21579536,
+    - target: {fileID: 5975149327270751015, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
       propertyPath: m_TagString
       value: Mage
+      objectReference: {fileID: 0}
+    - target: {fileID: 6407551613838538396, guid: e185c4535b0668fb7bc85e8f21579536,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 8507317097464175175, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
@@ -2179,10 +2199,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: SelectShieldMan
       objectReference: {fileID: 0}
-    - target: {fileID: 6407551613838538396, guid: e185c4535b0668fb7bc85e8f21579536,
+    - target: {fileID: 5975149327270751015, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
       propertyPath: m_TagString
       value: ShieldMan
+      objectReference: {fileID: 0}
+    - target: {fileID: 6407551613838538396, guid: e185c4535b0668fb7bc85e8f21579536,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 8507317097464175175, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
@@ -2724,10 +2749,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: SelectBerserker
       objectReference: {fileID: 0}
-    - target: {fileID: 6407551613838538396, guid: e185c4535b0668fb7bc85e8f21579536,
+    - target: {fileID: 5975149327270751015, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
       propertyPath: m_TagString
       value: Berserker
+      objectReference: {fileID: 0}
+    - target: {fileID: 6407551613838538396, guid: e185c4535b0668fb7bc85e8f21579536,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 8507317097464175175, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
@@ -2879,10 +2909,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: SelectSpearman
       objectReference: {fileID: 0}
-    - target: {fileID: 6407551613838538396, guid: e185c4535b0668fb7bc85e8f21579536,
+    - target: {fileID: 5975149327270751015, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
       propertyPath: m_TagString
       value: SpearMan
+      objectReference: {fileID: 0}
+    - target: {fileID: 6407551613838538396, guid: e185c4535b0668fb7bc85e8f21579536,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 8507317097464175175, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
@@ -3114,10 +3149,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: SelectSwordsMan
       objectReference: {fileID: 0}
-    - target: {fileID: 6407551613838538396, guid: e185c4535b0668fb7bc85e8f21579536,
+    - target: {fileID: 5975149327270751015, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
       propertyPath: m_TagString
       value: SwordsMan
+      objectReference: {fileID: 0}
+    - target: {fileID: 6407551613838538396, guid: e185c4535b0668fb7bc85e8f21579536,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 8507317097464175175, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}

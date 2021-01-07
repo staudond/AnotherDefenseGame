@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
+//stores last active button in scene
 public class LastActiveButton : MonoBehaviour {
     public static GameObject lastActiveButton;
     void Start() {

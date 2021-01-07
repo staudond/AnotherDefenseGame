@@ -172,6 +172,8 @@ public class GameManager : MonoBehaviour {
         Vector3Int sizes = roads.size;
         mapWidth = sizes.x;
         mapHeight = sizes.y;
+        print(mapWidth);
+        print(mapHeight);
         tileSize = roads.cellSize.x;
         cam = Camera.main;
         tileOffset = tileSize / 2f;
@@ -187,6 +189,7 @@ public class GameManager : MonoBehaviour {
 
     private List<GameObject> hightile;
     void Update() {
+        
 
         LivesText.text =  playerLives.ToString();
         GoldText.text =  playerGold.ToString();
@@ -212,10 +215,14 @@ public class GameManager : MonoBehaviour {
                 }
             }
             else if (isPlayersTurn) {
+                if (Input.GetKeyDown(KeyCode.Return)) {
+                    EndTurnWrapper();
+                }
+                
                 if (Input.GetKeyDown(KeyCode.P)) {
                     Pause();
                 }
-                
+
                 if (selectedSpawnUnit != Units.None) {
                     HighlightEmptyTiles();
                 }
@@ -344,6 +351,9 @@ public class GameManager : MonoBehaviour {
                 }
             }
             else {
+                if (Input.GetKeyDown(KeyCode.S)) {
+                    SkipTurnAnimation();
+                }
                 EventSystem.current.SetSelectedGameObject(null);
             }
         }
@@ -826,4 +836,6 @@ public class GameManager : MonoBehaviour {
         }
         
     }
+
+    
 }

@@ -8,10 +8,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestMap.unity
     guid: 09548b7e89f780da883fa49c4c678b73
   - enabled: 1
     path: Assets/Scenes/MapSelectionScene.unity
     guid: f24cb3334a2d1a7eb8b30729731886a6
+  - enabled: 1
+    path: Assets/Scenes/NarrowPassMap.unity
+    guid: d6bc19da31f792092aeea2bed90e2e79
+  - enabled: 1
+    path: Assets/Scenes/SurroundedMap.unity
+    guid: 52bbd5d39a16ec7c78648c1518c54da6
   m_configObjects: {}

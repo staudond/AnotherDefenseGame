@@ -60,6 +60,8 @@
           </e>
         </e>
         <e p="SceneChanger.cs" t="Include" />
+        <e p="SelectButtonDisabler.cs" t="Include" />
+        <e p="SelectButtonsShortcutHandler.cs" t="Include" />
         <e p="TestScript.cs" t="Include" />
         <e p="TextMesh Pro" t="Include">
           <e p="Fonts" t="Include">
