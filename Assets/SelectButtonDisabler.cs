@@ -5,16 +5,16 @@ using Button = UnityEngine.UI.Button;
 
 public class SelectButtonDisabler : MonoBehaviour {
     private GameManager manager;
-    private int gold;
+    public int gold;
     private Color defaultColor;
     private Text goldtext;
     void Start() {
         manager = GameObject.Find("GameManager").GetComponent<GameManager>();
         goldtext = transform.Find("Gold").GetComponent<Text>();
-        gold = int.Parse(goldtext.text);
         defaultColor = goldtext.color;
+        gold = int.Parse(goldtext.text);
     }
-
+    
     // Update is called once per frame
     void Update() {
         int playerGold = manager.PlayerGold;

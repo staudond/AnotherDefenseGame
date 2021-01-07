@@ -37,7 +37,7 @@ public class UnitProperties {
     public const int BerserkerAttackSpeed = 3;
     public const int BerserkerAttackRange = 15; 
     public const int BerserkerAttackCooldown = 0;
-    public const int BerserkerGoldValue = 175;
+    public const int BerserkerGoldValue = 150;
     
     //CrossbowMan properties
     public const int CrossbowManDmg = 40;
