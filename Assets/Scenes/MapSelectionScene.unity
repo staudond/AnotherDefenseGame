@@ -211,10 +211,50 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1858463299}
     m_Modifications:
+    - target: {fileID: 4059959798726019605, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_Text
+      value: Forrest Path
+      objectReference: {fileID: 0}
     - target: {fileID: 4059959798726019606, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 3.899994
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1978695685}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChangeScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: ForrestPathMap
       objectReference: {fileID: 0}
     - target: {fileID: 4059959799710299834, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
         type: 3}
@@ -324,7 +364,7 @@ PrefabInstance:
     - target: {fileID: 4059959799710299835, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
         type: 3}
       propertyPath: m_Name
-      value: Map3Button
+      value: ForrestPathMapButton
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90f219d9c01fbaa7485b2c0eeac710d5, type: 3}
@@ -585,6 +625,46 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1858463299}
     m_Modifications:
+    - target: {fileID: 4059959798726019605, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_Text
+      value: Islands
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1978695685}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChangeScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: IslandsMap
+      objectReference: {fileID: 0}
     - target: {fileID: 4059959799710299834, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -693,7 +773,7 @@ PrefabInstance:
     - target: {fileID: 4059959799710299835, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
         type: 3}
       propertyPath: m_Name
-      value: Map2Button
+      value: IslandsMapButton
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90f219d9c01fbaa7485b2c0eeac710d5, type: 3}

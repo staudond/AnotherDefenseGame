@@ -1432,7 +1432,7 @@ PrefabInstance:
     - target: {fileID: 5975149326353120332, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
       propertyPath: m_Text
-      value: AxeMan
+      value: AxeMan (4)
       objectReference: {fileID: 0}
     - target: {fileID: 5975149327270751014, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
@@ -1592,7 +1592,7 @@ PrefabInstance:
     - target: {fileID: 5975149326353120332, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
       propertyPath: m_Text
-      value: CrossbowMan
+      value: CrossbowMan (5)
       objectReference: {fileID: 0}
     - target: {fileID: 5975149327270751014, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
@@ -1752,7 +1752,7 @@ PrefabInstance:
     - target: {fileID: 5975149326353120332, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
       propertyPath: m_Text
-      value: Archer
+      value: Archer (3)
       objectReference: {fileID: 0}
     - target: {fileID: 5975149327270751014, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
@@ -1912,7 +1912,7 @@ PrefabInstance:
     - target: {fileID: 5975149326353120332, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
       propertyPath: m_Text
-      value: Mage
+      value: Mage (8)
       objectReference: {fileID: 0}
     - target: {fileID: 5975149327270751014, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
@@ -2072,7 +2072,7 @@ PrefabInstance:
     - target: {fileID: 5975149326353120332, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
       propertyPath: m_Text
-      value: ShieldMan
+      value: ShieldMan (7)
       objectReference: {fileID: 0}
     - target: {fileID: 5975149327270751014, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
@@ -2622,7 +2622,7 @@ PrefabInstance:
     - target: {fileID: 5975149326353120332, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
       propertyPath: m_Text
-      value: Berserker
+      value: Berserker (6)
       objectReference: {fileID: 0}
     - target: {fileID: 5975149327270751014, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
@@ -2782,7 +2782,7 @@ PrefabInstance:
     - target: {fileID: 5975149326353120332, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
       propertyPath: m_Text
-      value: SpearMan
+      value: SpearMan (1)
       objectReference: {fileID: 0}
     - target: {fileID: 5975149327270751014, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
@@ -2942,7 +2942,7 @@ PrefabInstance:
     - target: {fileID: 5975149326353120332, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}
       propertyPath: m_Text
-      value: SwordsMan
+      value: SwordsMan (2)
       objectReference: {fileID: 0}
     - target: {fileID: 5975149327270751012, guid: e185c4535b0668fb7bc85e8f21579536,
         type: 3}

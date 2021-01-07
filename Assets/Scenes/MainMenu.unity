@@ -314,7 +314,7 @@ GameObject:
   - component: {fileID: 656356854}
   - component: {fileID: 656356853}
   m_Layer: 5
-  m_Name: RawImage
+  m_Name: BackgroundImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -645,6 +645,41 @@ PrefabInstance:
       propertyPath: m_Text
       value: HOW TO PLAY
       objectReference: {fileID: 0}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 519420030}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChangeScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059959799710299833, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: HowToPlayScene
+      objectReference: {fileID: 0}
     - target: {fileID: 4059959799710299834, guid: 90f219d9c01fbaa7485b2c0eeac710d5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -769,7 +804,7 @@ GameObject:
   - component: {fileID: 1202934314}
   - component: {fileID: 1202934313}
   m_Layer: 5
-  m_Name: Text
+  m_Name: GameName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

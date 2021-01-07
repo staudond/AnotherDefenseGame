@@ -35,36 +35,52 @@ public class SelectButtonsShortcutHandler : MonoBehaviour
     private void SelectUnitToSpawnByKeyboard() {
         
         if (Input.GetKeyDown(KeyCode.Alpha1)) {
-            manager.SelectUnitToSpawn("SpearMan");
-            EventSystem.current.SetSelectedGameObject(SpearManButton);
+            if (manager.PlayerGold >= UnitProperties.SpearManGoldValue) {
+                manager.SelectUnitToSpawn("SpearMan");
+                EventSystem.current.SetSelectedGameObject(SpearManButton);
+            }
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2)) {
-            manager.SelectUnitToSpawn("SwordsMan");
-            EventSystem.current.SetSelectedGameObject(SwordManButton);
+            if (manager.PlayerGold >= UnitProperties.SwordsManGoldValue) {
+                manager.SelectUnitToSpawn("SwordsMan");
+                EventSystem.current.SetSelectedGameObject(SwordManButton);
+            }
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3)) {
-            manager.SelectUnitToSpawn("Archer");
-            EventSystem.current.SetSelectedGameObject(ArcherButton);
+            if (manager.PlayerGold >= UnitProperties.ArcherGoldValue) {
+                manager.SelectUnitToSpawn("Archer");
+                EventSystem.current.SetSelectedGameObject(ArcherButton);
+            }
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4)) {
-            manager.SelectUnitToSpawn("AxeMan");
-            EventSystem.current.SetSelectedGameObject(AxeManButton);
+            if (manager.PlayerGold >= UnitProperties.AxeManGoldValue) {
+                manager.SelectUnitToSpawn("AxeMan");
+                EventSystem.current.SetSelectedGameObject(AxeManButton);
+            }
         }
         else if (Input.GetKeyDown(KeyCode.Alpha5)) {
-            manager.SelectUnitToSpawn("CrossbowMan");
-            EventSystem.current.SetSelectedGameObject(CrossbowManButton);
+            if (manager.PlayerGold >= UnitProperties.CrossbowManGoldValue) {
+                manager.SelectUnitToSpawn("CrossbowMan");
+                EventSystem.current.SetSelectedGameObject(CrossbowManButton);
+            }
         }
         else if (Input.GetKeyDown(KeyCode.Alpha6)) {
-            manager.SelectUnitToSpawn("Berserker");
-            EventSystem.current.SetSelectedGameObject(BerserkerButton);
+            if (manager.PlayerGold >= UnitProperties.BerserkerGoldValue) {
+                manager.SelectUnitToSpawn("Berserker");
+                EventSystem.current.SetSelectedGameObject(BerserkerButton);
+            }
         }
         else if (Input.GetKeyDown(KeyCode.Alpha7)) {
-            manager.SelectUnitToSpawn("ShieldMan");
-            EventSystem.current.SetSelectedGameObject(ShieldManButton);
+            if (manager.PlayerGold >= UnitProperties.ShieldManGoldValue) {
+                manager.SelectUnitToSpawn("ShieldMan");
+                EventSystem.current.SetSelectedGameObject(ShieldManButton);
+            }
         }
         else if (Input.GetKeyDown(KeyCode.Alpha8)) {
-            manager.SelectUnitToSpawn("Mage");
-            EventSystem.current.SetSelectedGameObject(MageButton);
+            if (manager.PlayerGold >= UnitProperties.MageGoldValue) {
+                manager.SelectUnitToSpawn("Mage");
+                EventSystem.current.SetSelectedGameObject(MageButton);
+            }
         }
     }
 }
